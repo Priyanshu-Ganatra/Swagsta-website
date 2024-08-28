@@ -1,0 +1,20 @@
+.cardShadow {
+  box-shadow: 0px 0px 30px rgb(163, 160, 150);
+}
+
+.route:hover {
+  cursor: pointer;
+  color: rgb(163, 160, 150);
+}
+
+.mainDiv {
+  background-image: url("../../assets/homebg.png");
+  background-size: cover; /* Ensure the image covers the entire element */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  background-position: center; /* Center the image within the element */
+  background-attachment: fixed;
+}
+
+.socialLink:hover {
+  background-color: rgb(163, 160, 150);
+}
