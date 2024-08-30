@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import useLogout from "../../hooks/useLogout";
 
 const NavLinks = () => {
-    const user = useSelector((state) => state.auth) // bug: this is {}
+    const user = useSelector((state) => state.auth) // after successful login/signup this would be populated with user data
     const isLoggedIn = (user.username !== undefined || localStorage.getItem('user') !== null) ? true : false
     const { loading, logout } = useLogout()
 
