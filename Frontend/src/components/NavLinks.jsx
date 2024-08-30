@@ -9,7 +9,7 @@ const NavLinks = () => {
     const { loading, logout } = useLogout()
 
     return (
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-col md:flex-row items-center">
             <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/'}>About Us</NavLink>
             <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/portfolio'}>Portfolio</NavLink>
             <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/services'}>Services</NavLink>

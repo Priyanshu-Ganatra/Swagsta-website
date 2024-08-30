@@ -8,7 +8,7 @@ const HomePage = () => {
     <div className='mainDiv'>
       <div className='flex flex-col items-center'>
         {/* card */}
-        <div className="flex flex-col gap-10 items-center mt-14 cardShadow w-[44%] px-10 bg-white rounded-lg">
+        <div className="flex flex-col gap-10 items-center mt-14 cardShadow md:w-[44%] w-[90%] 2xl:w-[35%] px-6 md:px-10 bg-white rounded-lg">
           {/* logo */}
           <div className='mt-[63px]'>
             <img src={MyIcon} alt="Logo" />

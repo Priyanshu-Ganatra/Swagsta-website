@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 const CreativesGrid = ({ sidebarCollapsed, filteredCategories, sortBy }) => {
     const { loading, creatives } = useSelector(state => state.creatives)
-    console.log(filteredCategories)
 
     // Sort creatives based on the sortBy value
     const sortedCreatives = [...creatives].sort((a, b) => {

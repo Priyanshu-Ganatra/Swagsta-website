@@ -9,10 +9,11 @@
 
 .mainDiv {
   background-image: url("../../assets/homebg.png");
-  background-size: cover; /* Ensure the image covers the entire element */
-  background-repeat: no-repeat; /* Prevent the image from repeating */
-  background-position: center; /* Center the image within the element */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   background-attachment: fixed;
+  min-height: 100vh;
 }
 
 .socialLink:hover {
