@@ -10,11 +10,11 @@ const NavLinks = () => {
 
     return (
         <div className="flex gap-4">
-            <NavLink className={({ isActive }) => isActive ? 'text-cyan-500' : 'route'} to={'/'}>About Us</NavLink>
-            <NavLink className={({ isActive }) => isActive ? 'text-cyan-500' : 'route'} to={'/portfolio'}>Portfolio</NavLink>
-            <NavLink className={({ isActive }) => isActive ? 'text-cyan-500' : 'route'} to={'/services'}>Services</NavLink>
-            <NavLink className={({ isActive }) => isActive ? 'text-cyan-500' : 'route'} to={'/case-studies'}>Case Studies</NavLink>
-            <NavLink className={({ isActive }) => isActive ? 'text-cyan-500' : 'route'} to={'/contact'}>Contact Us</NavLink>
+            <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/'}>About Us</NavLink>
+            <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/portfolio'}>Portfolio</NavLink>
+            <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/services'}>Services</NavLink>
+            <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/case-studies'}>Case Studies</NavLink>
+            <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/contact'}>Contact Us</NavLink>
             {
                 isLoggedIn ?
                     <p className='route flex items-center gap-2' onClick={logout}>
@@ -30,8 +30,7 @@ const NavLinks = () => {
                     </p>
                     :
                     <>
-                        <NavLink className={({ isActive }) => isActive ? 'text-cyan-500 uppercase font-bold' : 'route uppercase font-bold'} to={'/login'}>Login</NavLink>
-                        <NavLink className={({ isActive }) => isActive ? 'text-cyan-500 uppercase font-bold' : 'route uppercase font-bold'} to={'/signup'}>Sign up</NavLink>
+                        <NavLink className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/login'}>Login</NavLink>
                     </>
             }
         </div>
