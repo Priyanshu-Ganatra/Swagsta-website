@@ -13,12 +13,18 @@ import ServicesPage from './pages/ServicesPage';
 import ContactUs from './pages/ContactUsPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import AdminPage from './pages/AdminPage';
 import { Provider } from 'react-redux';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />,
+    errorElement: <NotFoundPage />,
+  },
+  {
+    path: '/admin',
+    element: <AdminPage />,
     errorElement: <NotFoundPage />,
   },
   {
