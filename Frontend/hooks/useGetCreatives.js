@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { getAllCreatives as getAllCreativesApi } from "../src/utils/creativesApi";
+import { getAllCreatives as getAllCreativesApi } from "../src/apis/creativesApi";
 import { setCreativesAction } from "../features/creatives/creativesSlice";
 import { useDispatch } from 'react-redux';
 

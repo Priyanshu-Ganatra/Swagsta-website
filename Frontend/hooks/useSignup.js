@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { signup as signupApi } from "../src/utils/authApi";
+import { signup as signupApi } from "../src/apis/authApi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuthUserAction } from "../features/auth/authSlice";

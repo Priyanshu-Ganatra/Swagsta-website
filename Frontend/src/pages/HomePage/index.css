@@ -2,10 +2,6 @@
   box-shadow: 0px 0px 30px rgb(163, 160, 150);
 }
 
-.route:hover {
-  cursor: pointer;
-  color: rgb(163, 160, 150);
-}
 
 .mainDiv {
   background-image: url("../../assets/homebg.png");

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { login as loginApi } from "../src/utils/authApi";
+import { login as loginApi } from "../src/apis/authApi";
 import { useNavigate } from 'react-router-dom';
 import { setAuthUserAction } from "../features/auth/authSlice";
 import { useDispatch } from 'react-redux';

@@ -18,6 +18,7 @@ import { MdStar } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
 import { setAuthUserAction } from "../../../features/auth/authSlice"
 import toast from "react-hot-toast"
+import { limitWords } from "@/utils/limitWords"
 
 export default function ProjectPage() {
     const dispatch = useDispatch()
@@ -47,13 +48,6 @@ export default function ProjectPage() {
     useEffect(() => {
         setIsLiked(creativeData?.likedBy?.includes(user?.username))
     }, [creativeData]);
-
-    const limitWords = (str = '', limit) => {
-        if (str.split(' ').length > limit) {
-            return str.split(' ').slice(0, limit).join(' ') + '...'
-        }
-        return str
-    }
 
     const handleLike = async () => {
         if (!user.username) {

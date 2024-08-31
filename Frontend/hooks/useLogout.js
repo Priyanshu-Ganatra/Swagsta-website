@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { logout as logoutApi } from "../src/utils/authApi";
+import { logout as logoutApi } from "../src/apis/authApi";
 import { useDispatch } from 'react-redux';
 import { setAuthUserAction } from "../features/auth/authSlice";
 

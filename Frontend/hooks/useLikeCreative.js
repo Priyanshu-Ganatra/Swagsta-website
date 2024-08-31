@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { likeCreative as likeCreativeApi } from "../src/utils/creativesApi";
+import { likeCreative as likeCreativeApi } from "../src/apis/creativesApi";
 
 export default function useLikeCreative() {
     const [isLiking, setIsLiking] = useState(false)

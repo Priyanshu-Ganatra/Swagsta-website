@@ -17,6 +17,11 @@
   display: none; /* Chrome, Safari, and Opera */
 }
 
+.route:hover {
+  cursor: pointer;
+  color: rgb(163, 160, 150);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

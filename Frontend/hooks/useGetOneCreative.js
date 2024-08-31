@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { getOneCreative as getOneCreativeApi } from "../src/utils/creativesApi";
+import { getOneCreative as getOneCreativeApi } from "../src/apis/creativesApi";
 
 export default function useGetOneCreative() {
     const [loading, setLoading] = useState(false)
