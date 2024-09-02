@@ -3,9 +3,14 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser';
+import fileUpload from 'express-fileupload'
+import { cloudinaryConnect } from './config/cloudinary.js';
 
 import authRoutes from './routes/authRoutes.js'
 import creativesRoutes from './routes/creativesRoutes.js'
+import aboutUsRoutes from './routes/aboutUsRoutes.js'
+import contactUsRoutes from './routes/contactUsRoutes.js'
+import servicesRoutes from './routes/servicesRoutes.js'
 
 dotenv.config();
 const PORT = process.env.PORT || 8000
@@ -20,9 +25,21 @@ app.use(express.urlencoded({ extended: true })); // to parse incoming requests w
 // middleware for handling CORS Policy
 // Allow all origins with default of cors(*)
 app.use(cors())
+app.use(
+	fileUpload({
+		useTempFiles: true,
+		tempFileDir: "/tmp/",
+	})
+);
+
+// Connecting to cloudinary
+cloudinaryConnect();
 
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/creatives", creativesRoutes)
+app.use("/api/v1/aboutUs", aboutUsRoutes)
+app.use("/api/v1/contactUs", contactUsRoutes)
+app.use("/api/v1/services", servicesRoutes)
 
     ; (
         async () => {
