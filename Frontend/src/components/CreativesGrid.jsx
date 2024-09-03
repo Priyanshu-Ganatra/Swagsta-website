@@ -3,7 +3,7 @@ import { MdStar } from 'react-icons/md'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const CreativesGrid = ({ sidebarCollapsed, filteredCategories, sortBy }) => {
+const CreativesGrid = ({ filteredCategories, sortBy }) => {
     const { loading, creatives } = useSelector(state => state.creatives)
 
     // Sort creatives based on the sortBy value
@@ -22,12 +22,7 @@ const CreativesGrid = ({ sidebarCollapsed, filteredCategories, sortBy }) => {
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
             {loading
                 ?
-                <div
-                    style={{
-                        width: sidebarCollapsed ? 'calc(100vw - 100px)' : 'calc(100vw - 200px)'
-                    }}
-                    className='flex h-[200px] justify-center gap-3 flex-col items-center'
-                >
+                <div className='flex h-[200px] justify-center w-screen gap-3 flex-col items-center'>
                     <span className="loading loading-ring loading-lg"></span>
                     <p>Please wait intial load takes around a minute...</p>
                 </div>
