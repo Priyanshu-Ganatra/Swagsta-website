@@ -13,14 +13,13 @@ export const getData = async (req, res) => {
 
 export const updateData = async (req, res) => {
     try {
-        let { text, socials } = req.body;
+        let { text, socials, img } = req.body;
         socials = JSON.parse(socials);
         const data = await AboutUs.findOne();
         data.text = text;
         data.socials = socials;
 
-        if (req.files) {
-            const { img } = req.files;
+        if (img) {
             // console.log('uploaded image', img);
             const image = await uploadImageToCloudinary(
                 img,
@@ -44,13 +43,13 @@ export const uploadData = async (req, res) => {
     try {
         let { text, socials } = req.body;
         socials = JSON.parse(socials);
-        
+
         const data = await AboutUs.findOne();
         if (data) {
             return res.status(400).json({ message: "Data already exists. Use update route" });
         }
-        
-        if(req.files){
+
+        if (req.files) {
             const { img } = req.files;
             // console.log('uploaded image', img);
             const image = await uploadImageToCloudinary(
