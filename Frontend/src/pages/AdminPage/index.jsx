@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Menu, X, GalleryVerticalEnd, Info, BookOpenText, UserRoundPen, Users, LayoutDashboard, SquareArrowOutUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ContactUsForm from '@/components/ContactUsForm'
+import AboutUsForm from '@/components/AboutUsForm'
 
 export default function Component() {
     const [isOpen, setIsOpen] = useState(false)
@@ -137,9 +138,12 @@ export default function Component() {
             </div>
 
             <div className="p-4 sm:ml-64">
-                <h1 className="text-2xl font-bold mb-4 mt-16 uppercase text-center md:mt-20">{getTitle(selectedPage)}</h1>
+                <h1 className="text-2xl font-bold mb-4 mt-16 uppercase text-center md:mt-10">{getTitle(selectedPage)}</h1>
                 {
                     selectedPage === "contact" && <ContactUsForm />
+                }
+                {
+                    selectedPage === "about" && <AboutUsForm />
                 }
             </div>
 
