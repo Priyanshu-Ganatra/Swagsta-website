@@ -13,10 +13,19 @@ export const getData = async (req, res) => {
 
 export const updateData = async (req, res) => {
     try {
-        let { text, socials, img } = req.body;
-        socials = JSON.parse(socials);
+        let { text, socials, img, removeImg } = req.body;
+
+        // if any social link is empty, remove it from socials
+        socials = socials.filter(social => social.name && social.link);
+
         const data = await AboutUs.findOne();
         data.text = text;
+
+        if (data.img && removeImg) {
+            // console.log('removing image from db')
+            data.img = '';
+        }
+
         data.socials = socials;
 
         if (img) {

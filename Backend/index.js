@@ -17,10 +17,11 @@ const PORT = process.env.PORT || 8000
 const DATABASE_URL = process.env.MONGO_URI || 'mongodb+srv://priyanshuganatra:P372tFZFxUSKK2FH@cluster0.iesqvig.mongodb.net/Swagsta'
 
 const app = express()
-// Parse incoming requests data 
-app.use(express.json())
+// Increase payload size limits
+app.use(express.json({ limit: '10mb' })); // Increase limit for JSON payloads
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Increase limit for URL-encoded payloads
+
 app.use(cookieParser()); // to parse incoming requests with cookies
-app.use(express.urlencoded({ extended: true })); // to parse incoming requests with urlencoded payloads
 
 // middleware for handling CORS Policy
 // Allow all origins with default of cors(*)

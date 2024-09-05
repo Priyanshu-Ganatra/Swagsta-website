@@ -13,13 +13,13 @@ export const getData = async () => {
     return response.json();
 };
 
-export const updateData = async ({ text, socials, img }) => {
+export const updateData = async ({ text, socials, img, removeImg }) => {
     const response = await fetch(`${BASE_URL}/aboutUs/updateData`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text, socials, img }),
+        body: JSON.stringify({ text, socials, img, removeImg }),
     });
 
     if (!response.ok) {

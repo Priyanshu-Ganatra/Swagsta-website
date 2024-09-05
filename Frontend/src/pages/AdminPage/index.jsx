@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import ContactUsForm from '@/components/ContactUsForm'
 import AboutUsForm from '@/components/AboutUsForm'
 
-export default function Component() {
+export default function AdminPage() {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedPage, setSelectedPage] = useState('dashboard')
     const [isMobile, setIsMobile] = useState(false)
