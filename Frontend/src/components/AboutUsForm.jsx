@@ -125,7 +125,7 @@ export default function AboutUsForm() {
         <>
             {isFetchingAboutUsData ? <span className='flex flex-col gap-4 items-center mt-20'>
                 <span className="loading loading-ring loading-lg"></span>
-                <p>Loading About Us Data...</p>
+                <p>Loading About Us Page Data...</p>
             </span>
                 :
                 <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto p-6 bg-card rounded-lg shadow">
@@ -204,7 +204,7 @@ export default function AboutUsForm() {
                             ))}
                             <div className="flex flex-wrap gap-2 mt-2">
                                 {Object.entries(socialIcons).map(([name, icon]) => (
-                                    !formData.socials.hasOwnProperty(name) && (
+                                    !Object.prototype.hasOwnProperty.call(formData.socials, name) && (
                                         <Button
                                             key={name}
                                             type="button"

@@ -7,11 +7,23 @@ import { limitWords } from '@/utils/limitWords'
 export default function CaseStudyPage() {
     const [currentSlide, setCurrentSlide] = useState(0)
     const [clientIntro] = useState('Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam nobis recusandae reprehenderit vel, maiores dolores, dolorem magni minima esse dicta facere quaerat velit cum natus sapiente. Modi tempore fugiat quae laborum, alias iusto est laboriosam quis magnam! Libero possimus dolore sint modi vel reiciendis, obcaecati hic autem aliquid, veniam inventore! Odio nisi quis vero quam sit, quae minus necessitatibus ratione velit mollitia voluptatibus voluptate beatae? Dignissimos quia quo ab magni nesciunt repudiandae dolore minus consequuntur a reiciendis voluptas pariatur ipsam placeat quasi quod deleniti, minima sequi quidem excepturi dicta rem exercitationem! Possimus placeat assumenda ex officia optio, est praesentium quod reiciendis consectetur dignissimos voluptas beatae facilis eveniet! Odio, fugiat, aperiam odit atque consequatur laboriosam voluptatem ratione obcaecati sint officiis aspernatur enim impedit necessitatibus ipsa mollitia placeat libero deserunt quidem tempore perferendis labore, veritatis dolorem doloremque eum! Non commodi perferendis cum quas soluta sapiente, alias adipisci minima exercitationem maiores omnis? Consequuntur laboriosam totam ex voluptatum labore tenetur enim obcaecati? Repellat maiores impedit cumque illo ducimus excepturi modi placeat voluptates nulla, provident numquam qui quaerat pariatur consequuntur fugit, possimus blanditiis aspernatur neque sit quod expedita, reprehenderit accusantium. Neque minima nobis ex eum veniam adipisci, aut harum, sint nihil a similique! Cumque beatae illo esse ab itaque quod reiciendis a laborum harum dolorum maiores perferendis, odio sint quisquam suscipit doloremque adipisci quo non fugiat quia! Rerum, quia consectetur culpa voluptate animi quaerat nemo et possimus impedit voluptatum ab non reiciendis labore, dolores molestiae rem eos. Facilis est dolorem ratione facere aliquid, nulla modi at omnis doloremque. Ut aliquam eos est amet expedita cum iste. Ducimus illo non voluptas porro dicta. Ullam, rem obcaecati possimus numquam aut reiciendis et repudiandae sit praesentium corrupti facilis aspernatur, tempora magni dolorem unde ex nulla omnis! Natus odit voluptates consectetur quasi inventore ut voluptate incidunt eveniet fugiat sed?')
+    const [isMobile, setIsMobile] = useState(false)
     const totalSlides = projects.length
 
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % totalSlides)
     }
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768)
+        }
+
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+
+        return () => window.removeEventListener('resize', checkMobile)
+    }, [])
 
     const prevSlide = () => {
         setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides)
@@ -83,9 +95,9 @@ export default function CaseStudyPage() {
                 <div className='h-96 w-full rounded-lg overflow-hidden md:w-1/2'>
                     <img className='object-cover w-full h-full object-center' src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
                 </div>
-                <div className='h-96 flex flex-col gap-4 p-4 pl-0 w-full md:w-1/2'>
+                <div className='h-96 flex flex-col gap-4 py-4 w-full md:w-1/2'>
                     <h2 className='font-bold text-2xl'>Client name</h2>
-                    <p className='text-justify h-[85%]'>Client intro: {limitWords(clientIntro, 160)}</p>
+                    <p className='text-justify text-ellipsis'>Client intro: {isMobile ? limitWords(clientIntro, 80) : limitWords(clientIntro, 160)}</p>
                 </div>
             </div>
 

@@ -1,11 +1,37 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa"
+import useGetContactUsData from "../../../hooks/useGetContactUsData"
+import { useEffect, useState } from "react"
 
 export default function ContactUs() {
+    const { isFetchingContactUsData, getContactUsData } = useGetContactUsData()
+    const [address, setAddress] = useState('');
+    const [phoneNumbers, setPhoneNumbers] = useState([]);
+    const [emails, setEmails] = useState();
+
+    useEffect(() => {
+        getContactUsData().then((data) => {
+            setEmails(data.emails)
+            setPhoneNumbers(data.phoneNumbers)
+            setAddress(data.address)
+            console.log(data)
+        })
+    }, []);
+
+    if (isFetchingContactUsData) {
+        return (
+            <div className='flex flex-col items-center gap-4 mt-[40%] md:mt-[10%]'>
+                <span className="loading loading-ring loading-lg"></span>
+                <p className='uppercase font-bold'>Loading, Please wait...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="container mx-auto px-14 py-8 md:py-4">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none mb-4">
@@ -50,21 +76,41 @@ export default function ContactUs() {
                             <FaMapMarkerAlt className="w-5 h-5 mt-1 text-muted-foreground" />
                             <div>
                                 <h3 className="font-semibold">Address</h3>
-                                <p className="text-sm text-muted-foreground">123 Business Street, Suite 100, City, State 12345</p>
+                                <p className="text-sm text-muted-foreground">{address}</p>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <FaPhone className="w-5 h-5 text-muted-foreground" />
                             <div>
                                 <h3 className="font-semibold">Phone</h3>
-                                <p className="text-sm text-muted-foreground">(123) 456-7890</p>
+                                <p className="text-sm text-muted-foreground">
+                                    {
+                                        phoneNumbers?.map((phoneNumber, index) => (
+                                            <span key={index}>
+                                                {phoneNumber}
+                                                <br />
+                                                {/* {index !== phoneNumbers.length - 1 && <>, </>} */}
+                                            </span>
+                                        ))
+                                    }
+                                </p>
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
                             <FaEnvelope className="w-5 h-5 text-muted-foreground" />
                             <div>
                                 <h3 className="font-semibold">Email</h3>
-                                <p className="text-sm text-muted-foreground">contact@example.com</p>
+                                <p className="text-sm text-muted-foreground">
+                                    {
+                                        emails?.map((phoneNumber, index) => (
+                                            <span key={index}>
+                                                {phoneNumber}
+                                                <br />
+                                                {/* {index !== phoneNumbers.length - 1 && <>, </>} */}
+                                            </span>
+                                        ))
+                                    }
+                                </p>
                             </div>
                         </div>
                     </CardContent>
