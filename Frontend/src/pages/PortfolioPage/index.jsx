@@ -30,8 +30,10 @@ export default function PortfolioPage() {
 
   useEffect(() => {
     if (!loading) {
-      const categories = creatives.map(creative => creative.category)
-      setCategories([...new Set(categories)])
+      let categories = creatives.map(creative => creative.category)
+      categories = new Set(categories)
+      setCategories([...categories])
+      setFilteredCategories(Array.from(categories))
     }
   }, [creatives, loading]);
 
@@ -76,7 +78,7 @@ export default function PortfolioPage() {
             </DropdownMenu>
 
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger className="gap-3" asChild>
                 <Button variant="outline">Sort by: {sortBy} <MdKeyboardArrowDown /></Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-40">
