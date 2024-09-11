@@ -1,31 +1,67 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import useGetCreatives from '../../hooks/useGetCreatives';
-import { IoSearch } from "react-icons/io5";
+import { useEffect, useState } from 'react'
+import { IoSearch, IoMenu, IoClose } from "react-icons/io5"
+import useGetCreatives from '../../hooks/useGetCreatives'
 import NavLinks from './NavLinks'
-import { useEffect } from 'react';
 
-const Navbar = () => {
-    const { getCreatives } = useGetCreatives()
-    
-    useEffect(() => {
-      const loadCreatives = async () => {
-        await getCreatives()
-      }
-      loadCreatives()
-    }, []);
+export default function Navbar() {
+  const { getCreatives } = useGetCreatives()
+  const [isMobile, setIsMobile] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-    return (
-        <div className={`flex gap-10 h-20 items-center justify-end pr-10`}>
-            {/* links */}
-            <NavLinks />    
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
 
-            {/* search */}
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
+    const loadCreatives = async () => {
+      await getCreatives()
+    }
+    loadCreatives()
+  }, [])
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  return (
+    <nav className="relative z-10">
+      <div className={`flex h-20 items-center justify-between px-4 md:justify-end md:pr-10 md:gap-10`}>
+        {isMobile ? (
+          <>
+            <button onClick={toggleMenu} className="text-3xl z-50" aria-label="Toggle menu">
+              {isMenuOpen ? <IoClose className='text-black'/> : <IoMenu />}
+            </button>
+            <IoSearch className='scale-150' />
+          </>
+        ) : (
+          <>
+            <NavLinks />
             <div className='flex gap-2'>
-                {/* <input type="text" placeholder="Search" className="border border-gray-300 block rounded-xl p-2" /> */}
-                <IoSearch className='scale-[170%]'/>
+              <IoSearch className='scale-[170%]' />
             </div>
-        </div>
-    )
-}
+          </>
+        )}
+      </div>
 
-export default Navbar
+      {isMobile && (
+        <div 
+          className={`fixed inset-0 bg-white transform transition-transform duration-300 ease-in-out ${
+            isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          <div className="flex flex-col h-full justify-center items-center">
+            <NavLinks setIsMenuOpen={setIsMenuOpen} isMobile={isMobile}/>
+          </div>
+        </div>
+      )}
+    </nav>
+  )
+}

@@ -59,19 +59,13 @@ export default function PortfolioPage() {
                     </div>
                     :
                     categories.map((category, index) => (
-                      <>
-                        {/* <div key={index} className="flex items-center space-x-2 whitespace-nowrap" onClick={() => handleCategoryChange(category)}>
-                          <Checkbox id={category} />
-                          <label className="hover:cursor-pointer" htmlFor={category} onClick={(e) => e.stopPropagation()}>{category}</label>
-                        </div> */}
-                        <DropdownMenuCheckboxItem
-                          key={index}
-                          checked={filteredCategories.includes(category)}
-                          onCheckedChange={() => handleCategoryChange(category)}
-                        >
-                          {category}
-                        </DropdownMenuCheckboxItem>
-                      </>
+                      <DropdownMenuCheckboxItem
+                        key={index}
+                        checked={filteredCategories.includes(category)}
+                        onCheckedChange={() => handleCategoryChange(category)}
+                      >
+                        {category}
+                      </DropdownMenuCheckboxItem>
                     ))
                 }
               </DropdownMenuContent>

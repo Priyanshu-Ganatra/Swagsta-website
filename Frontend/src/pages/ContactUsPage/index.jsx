@@ -19,7 +19,6 @@ export default function ContactUs() {
             setEmails(data.emails)
             setPhoneNumbers(data.phoneNumbers)
             setAddress(data.address)
-            console.log(data)
         })
     }, []);
 

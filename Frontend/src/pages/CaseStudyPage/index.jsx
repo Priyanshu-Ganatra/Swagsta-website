@@ -44,7 +44,7 @@ export default function CaseStudyPage() {
         <>
             <div className="flex flex-col lg:flex-row w-full min-h-screen p-8 gap-12 relative md:pt-[18rem] 2xl:pt-[24rem]">
                 <div className="absolute inset-0" />
-                <div className="flex-[1.3] relative z-10 text-white">
+                <div className="flex-[1.3] relative text-white">
                     <h1 className="text-6xl font-bold uppercase font-oswald mb-4">{projects[currentSlide].title}</h1>
                     <p className="text-lg mb-6">{projects[currentSlide].description}</p>
                     <Button variant="outline" className="uppercase hover:bg-gray-400 rounded-xl mt-8 text-black border-white">
@@ -52,7 +52,7 @@ export default function CaseStudyPage() {
                         <IoChevronDown className="ml-2 h-4 w-4" />
                     </Button>
                 </div>
-                <div className="flex-1 relative z-10">
+                <div className="flex-1 relative">
                     <div className="overflow-hidden">
                         <div
                             className="flex transition-transform duration-300 ease-in-out"
