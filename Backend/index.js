@@ -4,7 +4,9 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload'
+import session from 'express-session';
 import { cloudinaryConnect } from './config/cloudinary.js';
+import passportConfig from './config/passportConfig.js'
 
 import authRoutes from './routes/authRoutes.js'
 import creativesRoutes from './routes/creativesRoutes.js'
@@ -27,12 +29,22 @@ app.use(cookieParser()); // to parse incoming requests with cookies
 // Allow all origins with default of cors(*)
 app.use(cors())
 app.use(
-	fileUpload({
-		useTempFiles: true,
-		tempFileDir: "/tmp/",
-	})
+    fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+    })
 );
 
+// Session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your_secret_key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set `secure: true` if using HTTPS
+}));
+
+app.use(passportConfig.initialize());
+app.use(passportConfig.session());
 // Connecting to cloudinary
 cloudinaryConnect();
 

@@ -10,13 +10,13 @@ export default function useSignup() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const signup = async ({ fullName, username, password, confirmPassword }) => {
-        const success = handleInputErrors({ fullName, username, password, confirmPassword })
+    const signup = async ({ fullName, email, password, confirmPassword }) => {
+        const success = handleInputErrors({ fullName, email, password, confirmPassword })
         if (!success) return
         
         setLoading(true);
         try {
-            const data = await signupApi({ fullName, username, password });
+            const data = await signupApi({ fullName, email, password });
             
             if (data.savedUser === undefined) {
                 throw new Error(data.message)
@@ -37,8 +37,8 @@ export default function useSignup() {
     return { loading, signup };
 }
 
-function handleInputErrors({ fullName, username, password, confirmPassword }) {
-    if (!fullName || !username || !password || !confirmPassword) {
+function handleInputErrors({ fullName, email, password, confirmPassword }) {
+    if (!fullName || !email || !password || !confirmPassword) {
         toast.error('Please fill every field')
         return false
     }

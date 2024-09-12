@@ -10,13 +10,13 @@ export default function useLogin() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const login = async ({ username, password }) => {
-        const success = handleInputErrors({ username, password })
+    const login = async ({ email, password }) => {
+        const success = handleInputErrors({ email, password })
         if (!success) return
 
         setLoading(true)
         try {
-            const data = await loginApi({ username, password })
+            const data = await loginApi({ email, password })
 
             if (data.user === undefined) {
                 throw new Error(data.message)
@@ -38,8 +38,8 @@ export default function useLogin() {
     return { loading, login }
 }
 
-function handleInputErrors({ username, password }) {
-    if (!username || !password) {
+function handleInputErrors({ email, password }) {
+    if (!email || !password) {
         toast.error("Please fill in all fields")
         return false
     }

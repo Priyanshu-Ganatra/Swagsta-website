@@ -4,15 +4,15 @@ import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
     try {
-        const { fullName, username, password } = req.body;
+        const { fullName, email, password } = req.body;
 
-        if(!fullName || !username || !password) {
+        if(!fullName || !email || !password) {
             return res.status(400).json({ message: "Please fill in all fields" });
         }
 
-        const existingUser = await User.findOne({ username });
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: "Username is already taken" });
+            return res.status(400).json({ message: "This E-mail has already been taken" });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -20,7 +20,7 @@ export const signup = async (req, res) => {
 
         const newUser = new User({
             fullName,
-            username,
+            email,
             password: hashedPassword,
         });
 
@@ -40,16 +40,16 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        if (!username || !password) {
+        if (!email || !password) {
             return res.status(400).json({ message: "Please fill in all fields" });
         }
 
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ message: "Invalid username" });
+            return res.status(400).json({ message: "Invalid email" });
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
@@ -58,7 +58,9 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: "Incorrect password" });
         }
 
-        generateTokenAndSetCookie(user._id, res);
+        // this can be further used for protecting routes using middleware for requests that require authentication
+        // as of now we aren't using protected routes, so commenting this out won't affect the functionality
+        generateTokenAndSetCookie(user._id, res);    
 
         user.password = undefined;
         res.status(200).json({ message: "Login successful", user })
