@@ -21,8 +21,10 @@ router.get(
             fullName: req.user.fullName,
         };
 
+        const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+        
         // Send the user data and token in the response
-        res.redirect(`http://localhost:5173/login?token=${token}&user=${encodeURIComponent(JSON.stringify(userData))}`);
+        res.redirect(`${FRONTEND_URL}/login?token=${token}&user=${encodeURIComponent(JSON.stringify(userData))}`);
     }
 );
 
