@@ -50,7 +50,7 @@ export default function LoginPage() {
 
     const handleGoogleLogin = () => {
         // Redirect to your backend Google login route
-        window.location.href = `https://swagsta-internship-assignment-backend.onrender.com/api/v1/auth/google`;
+        window.location.href = `${BASE_URL}/auth/google`;
     }
 
     return (
