@@ -1,40 +1,36 @@
 import mongoose from 'mongoose';
 
 const caseStudiesSchema = new mongoose.Schema({
-    projects: [
-        {
-            title: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-            description: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-            primaryImg: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-            secondaryImg: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-            clientName: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-            clientIntro: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-        }
-    ],
+    title: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    description: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    primaryImg: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    secondaryImg: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    clientName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    clientIntro: {
+        type: String,
+        required: true,
+        trim: true,
+    },
 },
     { timestamps: true }
 );

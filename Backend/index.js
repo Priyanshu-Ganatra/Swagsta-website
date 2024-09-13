@@ -13,6 +13,7 @@ import creativesRoutes from './routes/creativesRoutes.js'
 import aboutUsRoutes from './routes/aboutUsRoutes.js'
 import contactUsRoutes from './routes/contactUsRoutes.js'
 import servicesRoutes from './routes/servicesRoutes.js'
+import caseStudiesRoutes from './routes/caseStudiesRoutes.js'
 
 dotenv.config();
 const PORT = process.env.PORT || 8000
@@ -53,6 +54,7 @@ app.use("/api/v1/creatives", creativesRoutes)
 app.use("/api/v1/aboutUs", aboutUsRoutes)
 app.use("/api/v1/contactUs", contactUsRoutes)
 app.use("/api/v1/services", servicesRoutes)
+app.use("/api/v1/caseStudies", caseStudiesRoutes)
 
     ; (
         async () => {

@@ -4,6 +4,7 @@ import { Menu, X, GalleryVerticalEnd, Info, BookOpenText, UserRoundPen, Users, L
 import { Link } from 'react-router-dom'
 import ContactUsForm from '@/components/ContactUsForm'
 import AboutUsForm from '@/components/AboutUsForm'
+import CaseStudiesForm from '@/components/CaseStudiesForm'
 
 export default function AdminPage() {
     const [isOpen, setIsOpen] = useState(false)
@@ -144,6 +145,9 @@ export default function AdminPage() {
                 }
                 {
                     selectedPage === "about" && <AboutUsForm />
+                }
+                {
+                    selectedPage === "case-studies" && <CaseStudiesForm />
                 }
             </div>
 
