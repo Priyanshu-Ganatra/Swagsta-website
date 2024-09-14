@@ -6,7 +6,7 @@ import useLogout from "../../hooks/useLogout";
 
 const NavLinks = ({ setIsMenuOpen, isMobile }) => {
     const user = useSelector((state) => state.auth) // after successful login/signup this would be populated with user data
-    const isLoggedIn = (user.username !== undefined || localStorage.getItem('user') !== null) ? true : false
+    const isLoggedIn = (user.email !== undefined || localStorage.getItem('user') !== null) ? true : false
     const { loading, logout } = useLogout()
 
     return (

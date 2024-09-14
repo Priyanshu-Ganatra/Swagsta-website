@@ -24,6 +24,7 @@ router.get(
         
         // Send the user data and token in the response
         res.redirect(`${FRONTEND_URL}/login?token=${token}&user=${encodeURIComponent(JSON.stringify(userData))}`);
+        // res.json({ token, user: userData });
     }
 );
 
