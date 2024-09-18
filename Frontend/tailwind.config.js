@@ -18,6 +18,8 @@ module.exports = {
     },
     extend: {
       colors: {
+        creativeTitle: '#e6e6ea',
+        txtMuted: '#96969a',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

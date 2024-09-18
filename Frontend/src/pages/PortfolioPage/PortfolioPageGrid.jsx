@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 import { MdStar } from 'react-icons/md'
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 
-const CreativesGrid = ({ filteredCategories, sortBy }) => {
+const PortfolioPageGrid = ({ filteredCategories, sortBy, setIsModalOpen }) => {
     const { loading, creatives } = useSelector(state => state.creatives)
 
     // Sort creatives based on the sortBy value
@@ -18,15 +17,18 @@ const CreativesGrid = ({ filteredCategories, sortBy }) => {
         return 0;  // Default case (no sorting)
     });
 
+    if (loading) {
+        return (
+            <div className='flex h-[200px] justify-center gap-3 flex-col items-center'>
+                <span className="loading loading-ring loading-lg"></span>
+                <p className='uppercase text-center mx-1 font-bold'>Loading, Please wait...</p>
+            </div>
+        )
+    }
+
     return (
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-            {loading
-                ?
-                <div className='flex h-[200px] justify-center w-screen gap-3 flex-col items-center'>
-                    <span className="loading loading-ring loading-lg"></span>
-                    <p>Please wait intial load takes around a minute...</p>
-                </div>
-                :
+            {
                 sortedCreatives.map((item) => {
                     const isFeatured = item.featured;
                     const isLarge = item.likes >= 10
@@ -36,10 +38,11 @@ const CreativesGrid = ({ filteredCategories, sortBy }) => {
 
                     return (
                         shouldShow && (
-                            <Link
+                            <div
                                 key={item._id}
                                 className={`relative ${colSpan} ${rowSpan} hover:cursor-pointer aspect-square rounded-lg bg-white overflow-hidden`}
                                 to={`/project/${item._id}`}
+                                onClick={()=>setIsModalOpen(true)}
                             >
                                 <img
                                     src={item.coverImg}
@@ -51,12 +54,13 @@ const CreativesGrid = ({ filteredCategories, sortBy }) => {
                                         <MdStar size={16} />
                                     </div>
                                 )}
-                            </Link>
+                            </div>
                         )
                     )
-                })}
+                })
+            }
         </div>
     )
 }
 
-export default CreativesGrid
+export default PortfolioPageGrid

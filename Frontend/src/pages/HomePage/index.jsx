@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import DOMPurify from 'dompurify';
 import NavLinks from '@/components/NavLinks';
@@ -23,7 +24,7 @@ const HomePage = () => {
     return (
       <div className='flex flex-col items-center gap-4 mt-[40%] md:mt-[20%]'>
         <span className="loading loading-ring loading-lg"></span>
-        <p className='uppercase font-bold'>Loading, Please wait...</p>
+        <p className='uppercase text-center mx-1 font-bold'>Please wait, intial load takes around a minute...</p>
       </div>
     );
   }
@@ -32,7 +33,7 @@ const HomePage = () => {
     <div className='mainDiv'>
       <div className='flex flex-col items-center'>
         {/* card */}
-        <div className="flex flex-col gap-10 items-center mt-14 cardShadow md:w-[44%] w-[90%] 2xl:w-[35%] px-6 md:px-10 bg-white rounded-lg">
+        <div className="flex flex-col gap-10 items-center mt-14 cardShadow md:w-[46%] w-[90%] 2xl:w-[35%] px-6 md:px-10 bg-white rounded-lg">
           {/* logo */}
           <div className='mt-[63px]'>
             <img src={img} height={170} width={170} alt="Logo" />

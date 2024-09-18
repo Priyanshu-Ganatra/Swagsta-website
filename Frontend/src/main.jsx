@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import CaseStudyPage from './pages/CaseStudyPage';
 import NotFoundPage from './pages/NotFoundPage';
 import PortfolioPage from './pages/PortfolioPage';
+import StorePage from './pages/StorePage';
 import ProjectPage from './pages/ProjectPage';
 import MainLayout from './components/MainLayout';
 import { Toaster } from 'react-hot-toast'
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: '/portfolio',
         element: <PortfolioPage />,
+      },
+      {
+        path: '/store',
+        element: <StorePage />,
       },
       {
         path: '/project/:id',
