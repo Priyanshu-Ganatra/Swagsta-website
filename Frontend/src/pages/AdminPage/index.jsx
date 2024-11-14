@@ -5,7 +5,7 @@ import { Menu, X, GalleryVerticalEnd, Info, BookOpenText, UserRoundPen, Users, L
 import { Link } from 'react-router-dom'
 import ContactUsForm from '@/pages/AdminPage/components/ContactUsForm'
 import AboutUsForm from '@/pages/AdminPage/components/AboutUsForm'
-import CaseStudiesForm from '@/pages/AdminPage/components/CaseStudiesForm'
+import CaseStudiesEdit from '@/pages/AdminPage/components/CaseStudiesEdit'
 import CreativesForm from '@/pages/AdminPage/components/CreativesForm'
 import StoreProjectsForm from '@/pages/AdminPage/components/StoreProjectsForm'
 import useGetAboutUsData from '../../../hooks/useGetAboutUsData'
@@ -170,7 +170,7 @@ export default function AdminPage() {
                     selectedPage === "about" && <AboutUsForm />
                 }
                 {
-                    selectedPage === "case-studies" && <CaseStudiesForm />
+                    selectedPage === "case-studies" && <CaseStudiesEdit />
                 }
                 {
                     selectedPage === "portfolio" && <CreativesForm />
