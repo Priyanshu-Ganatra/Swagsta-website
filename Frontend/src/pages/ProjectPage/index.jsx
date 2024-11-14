@@ -9,95 +9,138 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { useEffect, useState } from "react"
 import RemainingGrid from "./RemainingGrid"
-import useGetOneCreative from "../../../hooks/useGetOneCreative"
-import useLikeCreative from "../../../hooks/useLikeCreative"
-import { useParams } from "react-router-dom"
+import useGetOneProject from "../../../hooks/useGetOneProject"
+import useLikeProject from "../../../hooks/useLikeProject"
+import { useParams, useNavigate } from "react-router-dom"
 import { MdStar } from "react-icons/md"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { setAuthUserAction } from "../../../features/auth/authSlice"
 import toast from "react-hot-toast"
 import { limitWords } from "@/utils/limitWords"
+import Comments from "./Comments"
 
 export default function ProjectPage() {
     const dispatch = useDispatch()
-    const localuser = localStorage.getItem('user')
-    const user = useSelector(state => state.auth)
-    const [creativeData, setCreativeData] = useState({})
+    const navigate = useNavigate()
+    let user = localStorage.getItem('user')
+    user = user ? JSON.parse(user) : null
+    const [isMobile, setIsMobile] = useState(false)
+    const [projectData, setProjectData] = useState({})
     const { id } = useParams()
-    const { loading: creativeLoading, getOneCreative } = useGetOneCreative()
-    const { isLiking, likeCreative } = useLikeCreative()
+    const { loading: projectLoading, getOneProject } = useGetOneProject()
+    const { isLiking, likeProject } = useLikeProject()
     const [isLiked, setIsLiked] = useState(false)
+    const [comments, setComments] = useState([])
+    const [showLoginDialog, setShowLoginDialog] = useState(false)
+    const [dialogMessage, setDialogMessage] = useState('');
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 1095)
+        }
+
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+
+        return () => window.removeEventListener('resize', checkMobile)
+    }, [])
 
     useEffect(() => {
         const getData = async () => {
-            getOneCreative(id)
+            getOneProject(id)
                 .then((data) => {
-                    setCreativeData(data)
+                    setProjectData(data)
+                    setComments(data.comments)
                 })
         }
         getData()
     }, [id]);
 
     useEffect(() => {
-        if (localuser)
-            dispatch(setAuthUserAction(JSON.parse(localuser)))
-    }, []);
+        if (user)
+            dispatch(setAuthUserAction(user))
+    }, [dispatch, user]);
 
     useEffect(() => {
-        setIsLiked(creativeData?.likedBy?.includes(user?.username))
-    }, [creativeData]);
+        setIsLiked(projectData?.likedBy?.includes(user?._id))
+    }, [projectData, user?._id]);
 
     const handleLike = async () => {
-        if (!user.username) {
-            alert('Please login to like this creative')
+        setDialogMessage('You need to be logged in to like this project. Would you like to log in now?')
+        if (!user) {
+            setShowLoginDialog(true)
             return
         }
-        await likeCreative(id, user.username)
+        await likeProject({ projectId: id, userId: user._id })
             .then((data) => {
                 if (isLiked) {
                     setIsLiked(false)
                 } else {
                     setIsLiked(true)
                 }
-                setCreativeData(data.creative)
-            }
-            )
+                setProjectData(data.project)
+            })
     }
 
     const handleShare = () => {
         if (navigator.share) {
             navigator.share({
-                title: creativeData?.title,
-                text: creativeData?.techDetails,
+                title: projectData?.title,
+                text: projectData?.techDetails,
                 url: window.location.href
             })
-                .then(() => console.log('Successful share'))
                 .catch((error) => console.log('Error sharing', error));
         } else {
-            toast.error('Web Share API not supported in your browser')
             navigator.clipboard.writeText(window.location.href)
-            toast.success('Link copied to clipboard instead')
+            toast.success('Link copied to clipboard')
         }
     }
 
     return (
         <div className="container mx-auto p-4 max-w-6xl">
-            {creativeLoading
+            <AlertDialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Authentication Required</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {dialogMessage}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => navigate('/login')}>
+                            Log in
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {projectLoading
                 ?
                 <div className='flex h-[200px] justify-center gap-3 flex-col whitespace-nowrap items-center'>
                     <span className="loading loading-ring loading-lg"></span>
-                    <p>Loading creative data...</p>
+                    <p>Loading project data...</p>
                 </div>
                 :
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className={`grid ${isMobile ? 'grid-cols-1' : 'md:grid-cols-3'} gap-6`}>
                         {/* Main content area */}
                         <div className="md:col-span-2">
                             <div className="w-full h-[500px] bg-muted overflow-hidden relative rounded-lg">
-                                <img src={creativeData?.coverImg} className=" w-full h-full object-contain" />
-                                {creativeData?.featured && (
+                                <img src={projectData?.coverImg} className="w-full h-full object-contain" />
+                                {projectData?.featured && (
                                     <div className="absolute top-2 right-2 bg-yellow-400 rounded-full p-1">
                                         <MdStar size={16} />
                                     </div>
@@ -105,20 +148,19 @@ export default function ProjectPage() {
                             </div>
                         </div>
 
-                        {/* Sidebar */}
                         <div className="space-y-6">
                             <Card>
-                                <CardContent className="p-4">
-                                    <h2 className="text-2xl font-bold mb-2">{creativeData?.title}</h2>
-                                    <p className="text-sm text-muted-foreground" title={creativeData?.techDetails}>
-                                        {limitWords(creativeData?.techDetails, 69)}
+                                <CardContent className={`p-4 ${!isMobile && 'min-h-[292px]'}`}>
+                                    <h2 className="text-2xl font-bold mb-2">{projectData?.title}</h2>
+                                    <p className="text-sm text-muted-foreground text-justify" title={projectData?.techDetails}>
+                                        {limitWords(projectData?.techDetails, 60)}
                                     </p>
                                 </CardContent>
                             </Card>
                             <Card>
                                 <CardContent className="p-4">
                                     <h2 className="text-md">Credits: {
-                                        creativeData?.credits?.map((credit, index) => `${credit}${index === creativeData.credits.length - 1 ? '' : ', '}`)
+                                        projectData?.credits?.map((credit, index) => `${credit}${index === projectData.credits.length - 1 ? '' : ', '}`)
                                     }</h2>
                                 </CardContent>
                             </Card>
@@ -133,7 +175,7 @@ export default function ProjectPage() {
                                 >
                                     <FaHeart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
                                     <span>{isLiking ? isLiked ? 'Removing Like...' : 'Liking...' :
-                                        creativeData?.likes}</span>
+                                        projectData?.likedBy?.length}</span>
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -151,7 +193,7 @@ export default function ProjectPage() {
                             <div className="flex items-center space-x-2 max-w-md">
                                 <div className="flex rounded-md overflow-hidden">
                                     <div className="bg-gray-200 text-xl font-bold p-1 px-3">
-                                        ${creativeData?.price}
+                                        ${projectData?.price}
                                     </div>
                                     <Button className="bg-blue-500 rounded-l-none hover:bg-blue-600 h-10 text-white font-bold">
                                         INSTANT BUY
@@ -161,21 +203,19 @@ export default function ProjectPage() {
                                     Request file
                                 </Button>
                             </div>
-
                         </div>
                     </div>
 
-
-                    <div className="mt-6 space-y-6 mb-10">
+                    <div className="mt-6 space-y-6 ">
                         <Card>
                             <CardContent className="p-4">
-                                <p className="text-sm text-muted-foreground" title={creativeData?.storyLine}>
-                                    {limitWords(creativeData?.storyLine, 300)}
+                                <p className="text-sm text-muted-foreground text-justify" title={projectData?.storyLine}>
+                                    {limitWords(projectData?.storyLine, 300)}
                                 </p>
                             </CardContent>
                         </Card>
 
-                        {creativeData?.otherImages?.length > 0 &&
+                        {projectData?.otherImages?.length > 0 &&
                             <Carousel
                                 opts={{
                                     align: "start",
@@ -183,7 +223,7 @@ export default function ProjectPage() {
                                 className="w-full cursor-grab select-none"
                             >
                                 <CarouselContent>
-                                    {creativeData?.otherImages?.map((otherImg, index) => (
+                                    {projectData?.otherImages?.map((otherImg, index) => (
                                         <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 aspect-square">
                                             <img
                                                 src={otherImg}
@@ -196,13 +236,11 @@ export default function ProjectPage() {
                                 <CarouselNext />
                             </Carousel>}
                     </div>
+
+                    <Comments comments={comments} setComments={setComments} id={id} setShowLoginDialog={setShowLoginDialog} setDialogMessage={setDialogMessage} user={user} />
                 </>}
 
-            <div>
-                <h2 className="text-2xl font-bold mb-4">Explore other creatives</h2>
-                <RemainingGrid exceptId={id} />
-            </div>
+            <RemainingGrid exceptId={id} />
         </div>
     )
 }
-

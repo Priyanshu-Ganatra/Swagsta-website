@@ -26,6 +26,7 @@ export const updateData = async ({ text, socials, img, removeImg }) => {
         const errorData = await response.json();
         throw new Error(errorData.message);
     }
+    window.location.reload();
 
     return response.json();
 };

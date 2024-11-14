@@ -11,6 +11,18 @@ const HomePage = () => {
   const [text, setText] = useState('');
   const [img, setImg] = useState('');
   const [socials, setSocials] = useState([]);
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1100)
+    }
+
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     getAboutUsData().then(data => {
@@ -46,7 +58,7 @@ const HomePage = () => {
 
           {/* routes */}
           <div className='flex gap-4 mb-[44px]'>
-            <NavLinks />
+            <NavLinks isMobile={isMobile} />
           </div>
         </div>
 

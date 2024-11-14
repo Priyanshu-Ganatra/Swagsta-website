@@ -1,4 +1,4 @@
-import CreativesGrid from "./CreativesGrid"
+import ProjectsGrid from "./ProjectsGrid"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -13,7 +13,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 import { useSelector } from "react-redux"
 
 export default function PortfolioPage() {
-  const { loading, creatives } = useSelector(state => state.creatives)
+  const { loading, projects } = useSelector(state => state.projects)
   const [sortBy, setSortBy] = useState('Most recent')
   // all filter categories
   const [categories, setCategories] = useState([])
@@ -30,12 +30,12 @@ export default function PortfolioPage() {
 
   useEffect(() => {
     if (!loading) {
-      let categories = creatives.map(creative => creative.category)
+      let categories = projects.map(project => project.category)
       categories = new Set(categories)
       setCategories([...categories])
       setFilteredCategories(Array.from(categories))
     }
-  }, [creatives, loading]);
+  }, [projects, loading]);
 
   return (
     <div className="flex">
@@ -86,7 +86,7 @@ export default function PortfolioPage() {
           </div>
 
           {/* Grid */}
-          <CreativesGrid filteredCategories={filteredCategories} sortBy={sortBy} />
+          <ProjectsGrid filteredCategories={filteredCategories} sortBy={sortBy} />
         </div>
       </div>
 

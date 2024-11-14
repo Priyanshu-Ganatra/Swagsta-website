@@ -33,6 +33,8 @@ export default function LoginPage() {
         if (token && user) {
             // Parse user data
             const userData = JSON.parse(decodeURIComponent(user));
+            userData['_id'] = userData['id']; // Rename 'id' to '_id'
+            delete userData['id']; // Delete 'id' key
 
             // Save user data and token to local storage
             localStorage.setItem('user', JSON.stringify(userData));

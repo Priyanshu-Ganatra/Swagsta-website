@@ -2,10 +2,7 @@
 import { ImageIcon, X } from "lucide-react"
 import { Label } from "@/components/ui/label"
 
-
-
 export default function ImageUpload({ id, image, setFormData }) {
-
     const handleImageUpload = (event, imageType) => {
         const file = event.target.files?.[0]
         if (file) {
@@ -19,7 +16,6 @@ export default function ImageUpload({ id, image, setFormData }) {
             reader.readAsDataURL(file)
         }
     }
-
 
     return (
         <div className="space-y-2">

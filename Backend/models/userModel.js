@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
+    pfp: {
+        type: String,
+        default: '',
+    },
     email: {
         type: String,
         required: true,

@@ -16,6 +16,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import AdminPage from './pages/AdminPage';
 import { Provider } from 'react-redux';
+import ProfilePage from './pages/ProfilePage/index.jsx';
+import CreativePage from './pages/CreativePage/index.jsx';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
         element: <PortfolioPage />,
       },
       {
+        path: '/creative/:id',
+        element: <CreativePage />,
+      },
+      {
         path: '/store',
         element: <StorePage />,
       },
@@ -62,6 +68,10 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignupPage />,
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
       },
     ],
   },

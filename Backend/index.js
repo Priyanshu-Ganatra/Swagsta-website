@@ -9,11 +9,12 @@ import { cloudinaryConnect } from './config/cloudinary.js';
 import passportConfig from './config/passportConfig.js'
 
 import authRoutes from './routes/authRoutes.js'
-import creativesRoutes from './routes/creativesRoutes.js'
+import projectsRoutes from './routes/projectsRoutes.js'
 import aboutUsRoutes from './routes/aboutUsRoutes.js'
 import contactUsRoutes from './routes/contactUsRoutes.js'
 import servicesRoutes from './routes/servicesRoutes.js'
 import caseStudiesRoutes from './routes/caseStudiesRoutes.js'
+import creativeRoutes from './routes/creativeRoutes.js'
 
 dotenv.config();
 const PORT = process.env.PORT || 8000
@@ -21,14 +22,14 @@ const DATABASE_URL = process.env.MONGO_URI || 'mongodb+srv://priyanshuganatra:P3
 
 const app = express()
 // Increase payload size limits
-app.use(express.json({ limit: '10mb' })); // Increase limit for JSON payloads
-app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Increase limit for URL-encoded payloads
+app.use(express.json({ limit: '100mb' })); // Increase limit for JSON payloads
+app.use(express.urlencoded({ extended: true, limit: '100mb' })); // Increase limit for URL-encoded payloads
 
 app.use(cookieParser()); // to parse incoming requests with cookies
 
 // middleware for handling CORS Policy
 // Allow all origins with default of cors(*)
-app.use(cors())
+app.use(cors({ credentials: true, origin: true })); // credentials means cookies are allowed to be sent
 app.use(
     fileUpload({
         useTempFiles: true,
@@ -50,11 +51,12 @@ app.use(passportConfig.session());
 cloudinaryConnect();
 
 app.use("/api/v1/auth", authRoutes)
-app.use("/api/v1/creatives", creativesRoutes)
+app.use("/api/v1/projects", projectsRoutes)
 app.use("/api/v1/aboutUs", aboutUsRoutes)
 app.use("/api/v1/contactUs", contactUsRoutes)
 app.use("/api/v1/services", servicesRoutes)
 app.use("/api/v1/caseStudies", caseStudiesRoutes)
+app.use("/api/v1/creative", creativeRoutes)
 
     ; (
         async () => {

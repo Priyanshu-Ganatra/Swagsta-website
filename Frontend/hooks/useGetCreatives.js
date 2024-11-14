@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { getAllCreatives as getAllCreativesApi } from "../src/apis/creativesApi";
-import { setCreativesAction } from "../features/creatives/creativesSlice";
 import { useDispatch } from 'react-redux';
+import { setCreativesAction } from '../features/creatives/creativesSlice';
 
 export default function useGetCreatives() {
     const [loading, setLoading] = useState(false)

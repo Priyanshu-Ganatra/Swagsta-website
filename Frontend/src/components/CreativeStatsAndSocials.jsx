@@ -7,21 +7,21 @@ import { FaPinterest } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa";
 
-const CreativeStatsAndSocials = ({ className }) => {
+const CreativeStatsAndSocials = ({ data, className }) => {
     return (
         <div className={`flex flex-col gap-2 ${className} text-[#bebec2] font-medium`}>
             <div className="flex justify-between items-center">
                 <span className="flex gap-2 justify-center items-center hover:cursor-pointer">
                     <BiSolidLike className="w-4 h-4" />
-                    <p>500</p>
+                    <p>{data?.likedBy.length}</p>
                 </span>
                 <span className="flex gap-2 justify-center items-center">
                     <IoEye className="w-4 h-4" />
-                    <p>2.4K</p>
+                    <p>{data?.views}</p>
                 </span>
                 <span className="flex gap-2 justify-center items-center">
                     <MessageSquareText className="w-4 h-4 scale-x-[-1]" />
-                    <p>234</p>
+                    <p>{data?.comments.length}</p>
                 </span>
             </div>
             <div className="flex justify-between items-center mt-4">

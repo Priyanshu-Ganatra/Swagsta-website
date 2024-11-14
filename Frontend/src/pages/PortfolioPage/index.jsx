@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import PortfolioPageGrid from './PortfolioPageGrid'
 import { Button } from "@/components/ui/button"
 import {
@@ -12,27 +11,12 @@ import {
 import { useEffect, useState } from 'react'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import { useSelector } from "react-redux"
-import { limitWords } from '@/utils/limitWords'
-import ArtistCard from '@/components/ArtistCard'
-import LikeAndSave from '@/components/LikeAndSave'
-import CreativeDescription from '@/components/CreativeDescription'
-import CreativeStatsAndSocials from '@/components/CreativeStatsAndSocials'
-import SoftwareUsed from '@/components/SoftwareUsed'
-
-const data = [
-  'https://cdnb.artstation.com/p/assets/images/images/079/938/795/large/ashladd_-19.jpg?1726214662',
-  'https://cdna.artstation.com/p/assets/images/images/079/898/878/large/xiangzhao-xi-04-4096.jpg?1726107257',
-  'https://cdnb.artstation.com/p/assets/images/images/079/898/903/large/xiangzhao-xi-03-4096.jpg?1726107323',
-  'https://images.unsplash.com/photo-1723384960692-1c2565e14b18?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw4fHx8ZW58MHx8fHx8',
-]
 
 export default function PortfolioPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { loading, creatives } = useSelector(state => state.creatives)
+  const { loading: creativesLoading, creatives } = useSelector(state => state.creatives)
   const [sortBy, setSortBy] = useState('Most recent')
   const [categories, setCategories] = useState([])
   const [filteredCategories, setFilteredCategories] = useState([])
-  const [description, setDescription] = useState('nicknamed " the walk to tylers" it was the sequence where Andy and rain first show up at Tylers trailer area. we had an initial location which was literally miles of open fields and mud . and i had to basically create the whole world up from that, with help from my awesome Pd Naaman Marshall. it needed to feel like the ass end of space and industrial. we wanted the ships not only fly really low but also have them parked right up to the trailer area ,to give it a real claustrophobic feel. i arranged tylers courtyard as an almost enclosed space to enhance this');
 
   const handleCategoryChange = (category) => {
     if (filteredCategories.includes(category)) {
@@ -43,47 +27,13 @@ export default function PortfolioPage() {
   }
 
   useEffect(() => {
-    if (!loading) {
-      let categories = creatives.map(creative => creative.category)
-      categories = new Set(categories)
+    if (!creativesLoading) {
+      let categories = creatives.map(creative => creative.softwareUsed)
+      categories = new Set(categories.flat());
       setCategories([...categories])
       setFilteredCategories(Array.from(categories))
     }
-  }, [creatives, loading]);
-
-  if (isModalOpen) {
-    return (
-      <div className="h-[calc(100vh-81px)] flex md:flex-row flex-col mx-6 gap-6">
-        <div className='md:w-[70%] overflow-auto flex flex-col rounded-t-xl'>
-          <div className='bg-black rounded-xl flex flex-col items-center gap-4 text-white'>
-            {
-              data.map((item, index) => (
-                <img
-                  key={index}
-                  src={item}
-                  alt={`image ${index + 1}`}
-                  className="max-w-full h-auto"
-                />
-              ))
-            }
-          </div>
-        </div>
-        <div className='bg-yellow-400 overflow-auto md:w-[30%] text-white'>
-          {/* data */}
-          <div className='flex flex-col p-8 rounded-xl bg-[#202024] relative'>
-            <ArtistCard setIsModalOpen={setIsModalOpen} />
-            <LikeAndSave className="mt-6" />
-            <CreativeDescription description={description} />
-            <CreativeStatsAndSocials className={'mt-4'} />
-            <SoftwareUsed className={'mt-10'}/>
-          </div>
-          {/* comments */}
-          {/* tags */}
-          {/* more by this artist */}
-        </div>
-      </div>
-    )
-  }
+  }, [creativesLoading, creatives]);
 
   return (
     <div className="flex">
@@ -96,7 +46,7 @@ export default function PortfolioPage() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="">
                 {
-                  loading
+                  creativesLoading
                     ?
                     <div className="flex flex-col items-center">
                       <span className="loading loading-ring loading-md"></span>
@@ -129,8 +79,8 @@ export default function PortfolioPage() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-
-          <PortfolioPageGrid setIsModalOpen={setIsModalOpen} filteredCategories={filteredCategories} sortBy={sortBy} />
+          
+          <PortfolioPageGrid filteredCategories={filteredCategories} sortBy={sortBy} />
         </div>
       </div>
     </div>

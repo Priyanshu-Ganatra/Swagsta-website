@@ -1,11 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { IoSearch, IoMenu, IoClose } from "react-icons/io5"
-import useGetCreatives from '../../hooks/useGetCreatives'
+import useGetProjects from '../../hooks/useGetProjects'
 import NavLinks from './NavLinks'
+import useGetCreatives from '../../hooks/useGetCreatives'
+import useGetCaseStudyProjects from '../../hooks/useGetCaseStudyProjects'
 
 export default function Navbar() {
+  const { getProjects } = useGetProjects()
   const { getCreatives } = useGetCreatives()
+  const { getCaseStudyProjects } = useGetCaseStudyProjects()
   const [isMobile, setIsMobile] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -21,10 +25,12 @@ export default function Navbar() {
   }, [])
 
   useEffect(() => {
-    const loadCreatives = async () => {
+    const loadData = async () => {
+      await getProjects()
       await getCreatives()
+      await getCaseStudyProjects()
     }
-    loadCreatives()
+    loadData()
   }, [])
 
   const toggleMenu = () => {
@@ -37,7 +43,7 @@ export default function Navbar() {
         {isMobile ? (
           <>
             <button onClick={toggleMenu} className="text-3xl z-50" aria-label="Toggle menu">
-              {isMenuOpen ? <IoClose className='text-black'/> : <IoMenu />}
+              {isMenuOpen ? <IoClose className='text-black' /> : <IoMenu />}
             </button>
             <IoSearch className='scale-150' />
           </>
@@ -52,13 +58,12 @@ export default function Navbar() {
       </div>
 
       {isMobile && (
-        <div 
-          className={`fixed inset-0 bg-white transform transition-transform duration-300 ease-in-out ${
-            isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+        <div
+          className={`fixed inset-0 bg-white transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
         >
           <div className="flex flex-col h-full justify-center items-center">
-            <NavLinks setIsMenuOpen={setIsMenuOpen} isMobile={isMobile}/>
+            <NavLinks setIsMenuOpen={setIsMenuOpen} isMobile={isMobile} />
           </div>
         </div>
       )}

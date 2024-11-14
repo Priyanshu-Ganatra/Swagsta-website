@@ -1,14 +1,16 @@
-import { addCreative, getAllCreatives, updateCreative, deleteCreative, getCreative, likeCreative } from '../controllers/creativesController.js';
 import express from 'express';
 const router = express.Router();
+import { addCreative, likeCreative, getAllCreatives, getCreative, updateCreative, deleteCreative, addComment } from '../controllers/creativeController.js';
 
 router.post('/add', addCreative);
-
-router.post('/like', likeCreative);
 
 router.get('/getAll', getAllCreatives);
 
 router.get('/get/:id', getCreative);
+
+router.post('/addCommentOn/:id', addComment);
+
+router.patch('/like', likeCreative);
 
 router.put('/update/:id', updateCreative);
 

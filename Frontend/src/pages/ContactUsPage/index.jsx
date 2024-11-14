@@ -54,7 +54,7 @@ export default function ContactUs() {
                             </div>
                             <div className="space-y-2">
                                 <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
-                                <Input id="email" type="email" placeholder="Your email address to which we'll reply" />
+                                <Input id="email" type="email" placeholder="Your email address which we'll reply to" />
                             </div>
                             <div className="space-y-2">
                                 <label htmlFor="message" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Message</label>

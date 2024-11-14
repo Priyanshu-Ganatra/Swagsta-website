@@ -1,15 +1,30 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
-import { Menu, X, GalleryVerticalEnd, Info, BookOpenText, UserRoundPen, Users, LayoutDashboard, SquareArrowOutUpRight } from 'lucide-react'
+import { Menu, X, GalleryVerticalEnd, Info, BookOpenText, UserRoundPen, Users, LayoutDashboard, SquareArrowOutUpRight, ShoppingBag } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import ContactUsForm from '@/components/ContactUsForm'
 import AboutUsForm from '@/components/AboutUsForm'
 import CaseStudiesForm from '@/components/CaseStudiesForm'
+import CreativesForm from '@/components/CreativesForm'
+import StoreProjectsForm from '@/components/StoreProjectsForm'
+import useGetAboutUsData from '../../../hooks/useGetAboutUsData'
 
 export default function AdminPage() {
+    const { isFetchingAboutUsData, getAboutUsData } = useGetAboutUsData();
+    const [logo, setLogo] = useState();
     const [isOpen, setIsOpen] = useState(false)
     const [selectedPage, setSelectedPage] = useState('dashboard')
     const [isMobile, setIsMobile] = useState(false)
+
+    useEffect(() => {
+        ; (
+            async () => {
+                const data = await getAboutUsData()
+                setLogo(data.img)
+            }
+        )()
+    }, []);
 
     const toggleSidebar = () => setIsOpen(!isOpen)
 
@@ -54,6 +69,8 @@ export default function AdminPage() {
                 return "edit about us page data"
             case 'contact':
                 return "edit contact us page data"
+            case 'store':
+                return "edit store page data"
             case 'users':
                 return page
         }
@@ -93,7 +110,7 @@ export default function AdminPage() {
                         >
                             <X className="h-6 w-6" />
                         </Button>
-                        : <div className='p-4 pb-0'>Logo here</div>
+                        : !isFetchingAboutUsData && <img src={logo} alt="logo" className='mx-auto mt-3 bg-gray-200 rounded-full object-cover w-20 h-20' />
                     }
                 </div>
                 <nav className="p-4">
@@ -114,6 +131,12 @@ export default function AdminPage() {
                             <Button variant="ghost" className="w-full justify-start" onClick={closeSidebar}>
                                 <GalleryVerticalEnd className="mr-2 h-4 w-4" />
                                 Portfolio Page
+                            </Button>
+                        </li>
+                        <li onClick={() => setSelectedPage('store')}>
+                            <Button variant="ghost" className="w-full justify-start" onClick={closeSidebar}>
+                                <ShoppingBag className="mr-2 h-4 w-4" />
+                                Store Page
                             </Button>
                         </li>
                         <li onClick={() => setSelectedPage('about')}>
@@ -148,6 +171,12 @@ export default function AdminPage() {
                 }
                 {
                     selectedPage === "case-studies" && <CaseStudiesForm />
+                }
+                {
+                    selectedPage === "portfolio" && <CreativesForm />
+                }
+                {
+                    selectedPage === "store" && <StoreProjectsForm />
                 }
             </div>
 

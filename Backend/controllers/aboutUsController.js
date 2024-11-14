@@ -1,5 +1,5 @@
 import AboutUs from "../models/aboutUsModel.js";
-import { uploadImageToCloudinary } from '../utils/imageUploader.js';
+import { uploadImageToCloudinary } from '../utils/uploadToCloudinary.js';
 
 export const getData = async (req, res) => {
     try {
@@ -14,6 +14,10 @@ export const getData = async (req, res) => {
 export const updateData = async (req, res) => {
     try {
         let { text, socials, img, removeImg } = req.body;
+
+        if (!text || !socials.length || !img) {
+            return res.status(400).json({ message: "Please provide all required fields" });
+        }
 
         // if any social link is empty, remove it from socials
         socials = socials.filter(social => social.name && social.link);

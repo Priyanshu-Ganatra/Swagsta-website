@@ -3,11 +3,11 @@ import { MdStar } from 'react-icons/md'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const CreativesGrid = ({ filteredCategories, sortBy }) => {
-    const { loading, creatives } = useSelector(state => state.creatives)
+const ProjectsGrid = ({ filteredCategories, sortBy }) => {
+    const { loading, projects } = useSelector(state => state.projects)
 
-    // Sort creatives based on the sortBy value
-    const sortedCreatives = [...creatives].sort((a, b) => {
+    // Sort projects based on the sortBy value
+    const sortedProjects = [...projects].sort((a, b) => {
         if (sortBy === 'Featured') {
             return b.featured - a.featured;  // Prioritize featured items
         } else if (sortBy === 'Most liked') {
@@ -22,15 +22,22 @@ const CreativesGrid = ({ filteredCategories, sortBy }) => {
         return (
             <div className='flex h-[200px] justify-center gap-3 flex-col items-center'>
                 <span className="loading loading-ring loading-lg"></span>
-                <p>Please wait intial load takes around a minute...</p>
+                <p className='uppercase text-center mx-1 font-bold'>Loading, Please wait...</p>
             </div>
         )
     }
 
+    if (!loading && projects.length === 0)
+        return (
+            <div className='flex justify-center gap-3 h-[50vh] flex-col items-center'>
+                <p className='uppercase text-center mx-1 font-bold'>No items in the store yet, come back later</p>
+            </div>
+        )
+
     return (
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
             {
-                sortedCreatives.map((item) => {
+                sortedProjects.map((item) => {
                     const isFeatured = item.featured;
                     const isLarge = item.likes >= 10
                     const colSpan = isLarge ? 'col-span-2' : 'col-span-1';
@@ -46,7 +53,7 @@ const CreativesGrid = ({ filteredCategories, sortBy }) => {
                             >
                                 <img
                                     src={item.coverImg}
-                                    alt={`Creative ${item._id}`}
+                                    alt={`Project ${item._id}`}
                                     className="w-full h-full object-cover"
                                 />
                                 {isFeatured && (
@@ -63,4 +70,4 @@ const CreativesGrid = ({ filteredCategories, sortBy }) => {
     )
 }
 
-export default CreativesGrid
+export default ProjectsGrid

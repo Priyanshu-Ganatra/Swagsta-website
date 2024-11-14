@@ -10,6 +10,12 @@ export async function uploadImageToCloudinary(file, folder, height, quality) {
         options.quality = quality
     }
     options.resource_type = "auto"
-    // console.log("OPTIONS", options)
+    return await cloudinary.uploader.upload(file, options)
+}
+
+export async function uploadVideoToCloudinary(file, folder) {
+    const options = { folder }
+    // console.log(file)
+    options.resource_type = "auto"
     return await cloudinary.uploader.upload(file, options)
 }

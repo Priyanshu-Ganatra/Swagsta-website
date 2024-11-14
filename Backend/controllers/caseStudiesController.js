@@ -1,11 +1,28 @@
 import CaseStudies from '../models/caseStudiesModel.js'
-import { uploadImageToCloudinary } from '../utils/imageUploader.js';
+import { uploadImageToCloudinary } from '../utils/uploadToCloudinary.js';
 
 export const getAllProjects = async (req, res) => {
     try {
         const projects = await CaseStudies.find()
         res.status(200).json(projects)
     } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
+}
+
+export const getProject = async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const project = await CaseStudies.findById(id)
+
+        if (!project) {
+            return res.status(404).json({ message: "Project not found" })
+        }
+
+        res.status(200).json(project)
+    }
+    catch (error) {
         res.status(404).json({ message: error.message })
     }
 }

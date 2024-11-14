@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  loading: false,
-  creatives: []
+    loading: true,
+    creatives: []
 };
 
 export const creativesSlice = createSlice({
-  name: 'creatives',
-  initialState,
-  reducers: {
-    setCreativesAction: (state, action) => {
-      // Set the state to the data from the action
-      return action.payload;
-    },
-  }
+    name: 'creatives',
+    initialState,
+    reducers: {
+        setCreativesAction: (state, action) => {
+            // Set the state to the data from the action
+            return action.payload;
+        },
+    }
 });
 
 // Export actions to be used in components

@@ -13,6 +13,19 @@ export const getAllProjects = async () => {
     return response.json();
 };
 
+export const getOneProject = async (id) => {
+    const response = await fetch(`${BASE_URL}/caseStudies/get/${id}`, {
+        method: 'GET',
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+
+    return response.json();
+}
+
 export const addProject = async ({ projectName, shortDescription, clientName, clientIntroduction, primaryImage, secondaryImage }) => {
     const response = await fetch(`${BASE_URL}/caseStudies/addProject`, {
         method: 'POST',

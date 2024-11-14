@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const creativeSchema = new mongoose.Schema({
+const projectSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -15,10 +15,6 @@ const creativeSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-    },
-    likes: {
-        type: Number,
-        default: 0,
     },
     price: {
         type: Number,
@@ -53,13 +49,20 @@ const creativeSchema = new mongoose.Schema({
     },
     likedBy: [
         {
-            type: String
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        }
+    ],
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'ProjectComment'
         }
     ],
 },
     { timestamps: true }
 );
 
-const Creative = mongoose.model('Creative', creativeSchema);
+const Project = mongoose.model('Project', projectSchema);
 
-export default Creative;
+export default Project;

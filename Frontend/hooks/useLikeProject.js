@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { likeCreative as likeCreativeApi } from "../src/apis/creativesApi";
+import { likeProject as likeProjectApi } from "../src/apis/projectsApi";
 
-export default function useLikeCreative() {
+export default function useLikeProject() {
     const [isLiking, setIsLiking] = useState(false)
 
-    const likeCreative = async (id, username) => {
+    const likeProject = async (formData) => {
         setIsLiking(true)
         try {
-            const data = await likeCreativeApi(id, username)
+            const data = await likeProjectApi(formData)
             return data
         } catch (error) {
             toast.error(error.message)
@@ -18,5 +18,5 @@ export default function useLikeCreative() {
         }
     }
 
-    return { isLiking, likeCreative }
+    return { isLiking, likeProject }
 }

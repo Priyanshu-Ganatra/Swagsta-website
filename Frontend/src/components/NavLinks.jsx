@@ -1,39 +1,25 @@
 /* eslint-disable react/prop-types */
 import { NavLink } from "react-router-dom"
-import { FiLogOut } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import useLogout from "../../hooks/useLogout";
 
+// Menu is nothing but the same navbar but in the mobile view
 const NavLinks = ({ setIsMenuOpen, isMobile }) => {
     const user = useSelector((state) => state.auth) // after successful login/signup this would be populated with user data
     const isLoggedIn = (user.email !== undefined || localStorage.getItem('user') !== null) ? true : false
-    const { loading, logout } = useLogout()
 
     return (
-        <div className={`flex gap-4 flex-col md:flex-row items-center ${isMobile && 'text-black'}`}>
-            <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/'}>About Us</NavLink>
+        <div className={`flex gap-4 items-center ${isMobile ? 'text-black flex-col' : 'flex-row'}`}>
+            <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/'}><p className="text-nowrap">About Us</p></NavLink>
             <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/portfolio'}>Portfolio</NavLink>
             <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/services'}>Services</NavLink>
-            <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/case-studies'}>Case Studies</NavLink>
-            <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/contact'}>Contact Us</NavLink>
+            <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/case-studies'}><p className="text-nowrap">Case Studies</p></NavLink>
+            <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/contact'}><p className="text-nowrap">Contact Us</p></NavLink>
             <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/store'}>Store</NavLink>
             {
                 isLoggedIn ?
-                    <p className='route flex items-center gap-2' onClick={logout}>
-                        {loading ?
-                            <>
-                                Logging out...
-                                <span className="loading loading-spinner loading-xs"></span>
-                            </> :
-                            <>
-                                Log out
-                                <FiLogOut />
-                            </>}
-                    </p>
+                    <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/profile'}>Profile</NavLink>
                     :
-                    <>
-                        <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/login'}>Login</NavLink>
-                    </>
+                    <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/login'}>Login</NavLink>
             }
         </div>
     )

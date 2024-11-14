@@ -3,15 +3,9 @@ const pureref = 'https://cdna.artstation.com/p/softwares/icons/000/004/584/defau
 const zbrush = 'https://cdna.artstation.com/p/softwares/icons/000/000/046/default/zBrush3.png?1505488078';
 const maya = 'https://cdna.artstation.com/p/softwares/icons/000/000/024/default/maya.png?1504879343';
 const blender = 'https://cdna.artstation.com/p/softwares/icons/000/000/008/default/blender_icon_1024x1024.png?1570478232';
+const photoshop = 'https://cdna.artstation.com/p/softwares/icons/000/000/032/default/Photoshop.png?1608144074';
 
-const softwares = [
-    'PureRef',
-    'ZBrush',
-    'Maya',
-    'Blender'
-];
-
-const SoftwareUsed = ({ className }) => {
+const SoftwareUsed = ({ data, className }) => {
     const getLogo = (name) => {
         if (name.toLowerCase() === 'pureref') {
             return <img width="16" height="16" src={pureref} alt={name} />;
@@ -25,6 +19,9 @@ const SoftwareUsed = ({ className }) => {
         if (name.toLowerCase() === 'blender') {
             return <img width="16" height="16" src={blender} alt={name} />;
         }
+        if (name.toLowerCase() === 'photoshop') {
+            return <img width="16" height="16" src={photoshop} alt={name} />;
+        }
         return null;
     };
 
@@ -35,10 +32,10 @@ const SoftwareUsed = ({ className }) => {
             </h4>
             <div className="flex gap-2 flex-wrap">
                 {
-                    softwares.map((sware, i) => (
+                    data?.softwareUsed?.map((sw, i) => (
                         <div key={i} className="software-item flex bg-[#404044] hover:bg-[#5b5b61] rounded justify-center items-center p-[2px] text-creativeTitle hover:cursor-pointer px-2 gap-2">
-                            {getLogo(sware)}
-                            {sware}
+                            {getLogo(sw)}
+                            {sw}
                         </div>
                     ))
                 }

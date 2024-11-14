@@ -1,7 +1,7 @@
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const addCreative = async (creativeData) => {
-    const response = await fetch(`${BASE_URL}/creatives/add`, {
+    const response = await fetch(`${BASE_URL}/creative/add`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -17,26 +17,14 @@ export const addCreative = async (creativeData) => {
     return response.json();
 };
 
-export const likeCreative = async (id, username) => {
-    const response = await fetch(`${BASE_URL}/creatives/like`, {
+export const addComment = async ({ text, creativeId }) => {
+    const response = await fetch(`${BASE_URL}/creative/addCommentOn/${creativeId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, username }),
-    });
-
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-    }
-
-    return response.json();
-}
-
-export const deleteCreative = async (id) => {
-    const response = await fetch(`${BASE_URL}/creatives/delete/${id}`, {
-        method: 'DELETE',
+        body: JSON.stringify({ text }),
+        credentials: 'include'
     });
 
     if (!response.ok) {
@@ -47,8 +35,38 @@ export const deleteCreative = async (id) => {
     return response.json();
 };
 
+// export const likeProject = async (id, username) => {
+//     const response = await fetch(`${BASE_URL}/projects/like`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ id, username }),
+//     });
+
+//     if (!response.ok) {
+//         const errorData = await response.json();
+//         throw new Error(errorData.message);
+//     }
+
+//     return response.json();
+// }
+
+// export const deleteProject = async (id) => {
+//     const response = await fetch(`${BASE_URL}/projects/delete/${id}`, {
+//         method: 'DELETE',
+//     });
+
+//     if (!response.ok) {
+//         const errorData = await response.json();
+//         throw new Error(errorData.message);
+//     }
+
+//     return response.json();
+// };
+
 export const getAllCreatives = async () => {
-    const response = await fetch(`${BASE_URL}/creatives/getAll`, {
+    const response = await fetch(`${BASE_URL}/creative/getAll`, {
         method: 'GET',
     });
 
@@ -61,7 +79,7 @@ export const getAllCreatives = async () => {
 };
 
 export const getOneCreative = async (id) => {
-    const response = await fetch(`${BASE_URL}/creatives/get/${id}`, {
+    const response = await fetch(`${BASE_URL}/creative/get/${id}`, {
         method: 'GET',
     });
 
@@ -73,19 +91,19 @@ export const getOneCreative = async (id) => {
     return response.json();
 }
 
-export const updateCreative = async (id, updatedCreative) => {
-    const response = await fetch(`${BASE_URL}/creatives/update/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedCreative),
-    });
+// export const updateProject = async (id, updatedProject) => {
+//     const response = await fetch(`${BASE_URL}/projects/update/${id}`, {
+//         method: 'PUT',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(updatedProject),
+//     });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-    }
+//     if (!response.ok) {
+//         const errorData = await response.json();
+//         throw new Error(errorData.message);
+//     }
 
-    return response.json();
-};
+//     return response.json();
+// };
