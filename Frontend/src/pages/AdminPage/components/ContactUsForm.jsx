@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { PlusCircle, X } from "lucide-react"
-import useUpdateContactUsData from '../../hooks/useUpdateContactUsData'
-import useGetContactUsData from '../../hooks/useGetContactUsData'
+import useUpdateContactUsData from '../../../../hooks/useUpdateContactUsData'
+import useGetContactUsData from '../../../../hooks/useGetContactUsData'
 
 export default function ContactUsForm() {
     const [address, setAddress] = useState('')

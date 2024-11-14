@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-'use client'
-
 import { useState, useRef, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { X, Upload } from 'lucide-react'
-import useAddCreative from '../../hooks/useAddCreative'
+import useAddCreative from '../../../../hooks/useAddCreative'
 
 const softwareOptions = ['PureRef', 'ZBrush', 'Maya', 'Blender', 'Photoshop']
 

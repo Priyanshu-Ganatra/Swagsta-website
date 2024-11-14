@@ -6,7 +6,7 @@ import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { X, Upload } from "lucide-react"
-import useAddStoreProject from '../../hooks/useAddStoreProject'
+import useAddStoreProject from '../../../../hooks/useAddStoreProject'
 
 const ImageUpload = ({ id, label, multiple, images, setImages }) => {
   const handleDrop = (e) => {

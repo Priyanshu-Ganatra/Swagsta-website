@@ -3,11 +3,11 @@ import { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Menu, X, GalleryVerticalEnd, Info, BookOpenText, UserRoundPen, Users, LayoutDashboard, SquareArrowOutUpRight, ShoppingBag } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import ContactUsForm from '@/components/ContactUsForm'
-import AboutUsForm from '@/components/AboutUsForm'
-import CaseStudiesForm from '@/components/CaseStudiesForm'
-import CreativesForm from '@/components/CreativesForm'
-import StoreProjectsForm from '@/components/StoreProjectsForm'
+import ContactUsForm from '@/pages/AdminPage/components/ContactUsForm'
+import AboutUsForm from '@/pages/AdminPage/components/AboutUsForm'
+import CaseStudiesForm from '@/pages/AdminPage/components/CaseStudiesForm'
+import CreativesForm from '@/pages/AdminPage/components/CreativesForm'
+import StoreProjectsForm from '@/pages/AdminPage/components/StoreProjectsForm'
 import useGetAboutUsData from '../../../hooks/useGetAboutUsData'
 
 export default function AdminPage() {
@@ -110,7 +110,7 @@ export default function AdminPage() {
                         >
                             <X className="h-6 w-6" />
                         </Button>
-                        : !isFetchingAboutUsData && <img src={logo} alt="logo" className='mx-auto mt-3 bg-gray-200 rounded-full object-cover w-20 h-20' />
+                        : !isFetchingAboutUsData && <img src={logo} alt="logo" className='mx-auto mt-3 border border-dashed border-black/50 rounded-full object-cover w-28 h-28' />
                     }
                 </div>
                 <nav className="p-4">

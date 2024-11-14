@@ -7,8 +7,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaYoutube, FaWhatsapp, FaBehance } from 'react-icons/fa'
 import { IoCloseSharp } from "react-icons/io5"
 import { CiImageOn } from "react-icons/ci"
-import useUpdateAboutUsData from '../../hooks/useUpdateAboutUsData'
-import useGetAboutUsData from '../../hooks/useGetAboutUsData'
+import useUpdateAboutUsData from '../../../../hooks/useUpdateAboutUsData'
+import useGetAboutUsData from '../../../../hooks/useGetAboutUsData'
 
 const socialIcons = {
     facebook: <FaFacebook className="h-5 w-5" />,

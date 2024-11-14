@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import ImageUpload from "./ImageUpload"
-import useAddCaseStudyProject from "../../hooks/useAddCaseStudyProject"
+import useAddCaseStudyProject from "../../../../hooks/useAddCaseStudyProject"
 
 export default function CaseStudyForm() {
     const { isAdding, addCaseStudyProject } = useAddCaseStudyProject()
