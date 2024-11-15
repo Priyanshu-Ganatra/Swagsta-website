@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -6,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import ImageUpload from "./ImageUpload"
 import useAddCaseStudyProject from "../../../../hooks/useAddCaseStudyProject"
 
-export default function CaseStudyForm() {
+export default function CaseStudyForm({ projects, setProjects }) {
     const { isAdding, addCaseStudyProject } = useAddCaseStudyProject()
 
     const [formData, setFormData] = useState({
@@ -40,6 +41,10 @@ export default function CaseStudyForm() {
                 primaryImage: null,
                 secondaryImage: null
             })
+        }
+
+        if (data.addedProject)  {
+            setProjects([...projects, data.addedProject])
         }
     }
 

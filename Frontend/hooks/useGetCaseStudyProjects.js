@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setCaseStudyProjectsAction } from '../features/caseStudyProjects/caseStudySlice';
 
 export default function useGetCaseStudyProjects() {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const dispatch = useDispatch()
 
     const getCaseStudyProjects = async () => {
@@ -14,6 +14,7 @@ export default function useGetCaseStudyProjects() {
         try {
             const data = await getAllProjectsApi()
             dispatch(setCaseStudyProjectsAction({ loading: false, caseStudyProjects: data }))
+            return data
         } catch (error) {
             toast.error(error.message)
         }

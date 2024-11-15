@@ -79,13 +79,13 @@ export default function AdminPage() {
     return (
         <div className="relative min-h-screen">
             <Button
-                variant="ghost"
+                variant="outline"
                 size="icon"
                 className="fixed top-4 left-4 z-50"
                 onClick={toggleSidebar}
                 aria-label={isOpen ? "Close menu" : "Open menu"}
             >
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6 scale-150" />}
             </Button>
 
             {/* Overlay */}
@@ -103,12 +103,12 @@ export default function AdminPage() {
                 <div className="flex bg-white p-4">
                     {isMobile ?
                         <Button
-                            variant="ghost"
+                            variant="outline"
                             size="icon"
                             onClick={toggleSidebar}
                             aria-label="Close menu"
                         >
-                            <X className="h-6 w-6" />
+                            <X className="h-6 scale-150 w-6" />
                         </Button>
                         : !isFetchingAboutUsData && <img src={logo} alt="logo" className='mx-auto mt-3 border border-dashed border-black/50 rounded-full object-cover w-28 h-28' />
                     }
@@ -180,8 +180,8 @@ export default function AdminPage() {
                 }
             </div>
 
-            <Button variant="ghost" className='absolute p-0 top-5 right-5'>
-                <Link className='flex items-center gap-2 w-full h-full m-4' to={'/'}>Visit site <SquareArrowOutUpRight className='scale-75' /></Link>
+            <Button variant="outline" className='fixed p-0 top-5 right-5'>
+                <Link className='flex items-center gap-2 w-full h-full m-4 min-w-full justify-center' to={'/'}>Visit site <SquareArrowOutUpRight className='scale-75' /></Link>
             </Button>
         </div>
     )

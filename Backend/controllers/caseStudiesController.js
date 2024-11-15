@@ -58,10 +58,30 @@ export const addProject = async (req, res) => {
         )
         newProject.secondaryImg = secondaryImg.secure_url
 
-        await newProject.save()
-        res.status(201).json({ message: "Project added" })
+        const addedProject = await newProject.save()
+        res.status(201).json({ message: "Project added", addedProject })
     } catch (error) {
         console.log("Error in addProject controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+export const deleteProject = async (req, res) => {
+    const { id } = req.params
+
+    try {
+        if(!id) {
+            return res.status(400).json({ message: "Please provide an id", success: false })
+        }
+        
+        const deletedCaseStudyProject = await CaseStudies.findByIdAndDelete(id)
+        if (!deletedCaseStudyProject) {
+            return res.status(404).json({ message: "Project not found", success: false })
+        }
+        
+        res.status(200).json({ message: "Project deleted", success: true })
+    }
+    catch (error) {
+        res.status(404).json({ message: error.message, success: false })
     }
 }

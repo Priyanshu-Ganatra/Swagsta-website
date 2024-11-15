@@ -42,3 +42,16 @@ export const addProject = async ({ projectName, shortDescription, clientName, cl
 
     return response.json();
 };
+
+export const deleteProject = async (id) => {
+    const response = await fetch(`${BASE_URL}/caseStudies/delete/${id}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+
+    return response.json();
+}
