@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import ImageUpload from "./ImageUpload"
 import useAddCaseStudyProject from "../../../../hooks/useAddCaseStudyProject"
+import useUpdateCaseStudyProject from "../../../../hooks/useUpdateCaseStudyProject"
 
-export default function CaseStudyForm({ projects, setProjects }) {
+
+export default function CaseStudyForm({ projectToEdit, setProjectToUpdate, projects, setProjects }) {
     const { isAdding, addCaseStudyProject } = useAddCaseStudyProject()
+    const { isUpdating, updateCaseStudyProject } = useUpdateCaseStudyProject()
 
     const [formData, setFormData] = useState({
         projectName: '',
@@ -18,6 +21,21 @@ export default function CaseStudyForm({ projects, setProjects }) {
         primaryImage: null,
         secondaryImage: null
     })
+
+    useEffect(() => {
+        if (projectToEdit) {
+            // get the project to edit from the projects array
+            const project = projects.find(project => project._id === projectToEdit)
+            setFormData({
+                projectName: project.title,
+                shortDescription: project.description,
+                clientName: project.clientName,
+                clientIntroduction: project.clientIntro,
+                primaryImage: project.primaryImg,
+                secondaryImage: project.secondaryImg
+            })
+        }
+    }, [projectToEdit, projects]);
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -29,10 +47,10 @@ export default function CaseStudyForm({ projects, setProjects }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const data = await addCaseStudyProject(formData)
+        const res = await addCaseStudyProject(formData)
 
         // Reset form after submission if successful
-        if (data) {
+        if (res) {
             setFormData({
                 projectName: '',
                 shortDescription: '',
@@ -43,14 +61,51 @@ export default function CaseStudyForm({ projects, setProjects }) {
             })
         }
 
-        if (data.addedProject)  {
-            setProjects([...projects, data.addedProject])
+        if (res.addedProject) {
+            setProjects([...projects, res.addedProject])
+        }
+    }
+    
+    const handleEdit = async (e) => {
+        e.preventDefault()
+        const res = await updateCaseStudyProject(projectToEdit, formData)
+        console.log(res.updatedProject);
+        
+        if (res.updatedProject) {            
+            setProjects(projects.map(project => project._id === projectToEdit ? res.updatedProject : project))
+            setFormData({
+                projectName: '',
+                shortDescription: '',
+                clientName: '',
+                clientIntroduction: '',
+                primaryImage: null,
+                secondaryImage: null
+            })
+            setProjectToUpdate(null);
         }
     }
 
+    const cancelEdit = (e) => {
+        e.preventDefault()
+        setProjectToUpdate(null)
+        setFormData({
+            projectName: '',
+            shortDescription: '',
+            clientName: '',
+            clientIntroduction: '',
+            primaryImage: null,
+            secondaryImage: null
+        })
+    }
+
     return (
-        <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl mx-auto p-6">
-            <h1 className="text-2xl text-center mb-6">Add a project</h1>
+        <form onSubmit={handleSubmit} id="caseStudyForm" className="space-y-8 max-w-2xl mx-auto p-6">
+            <h1 className="text-2xl text-center">{
+                projectToEdit
+                    ? 'Editing Project'
+                    : 'Add New Project'
+            }
+            </h1>
 
             <div className="space-y-2">
                 <Label htmlFor="projectName">Project Name</Label>
@@ -100,9 +155,20 @@ export default function CaseStudyForm({ projects, setProjects }) {
 
             <ImageUpload id="secondaryImage" image={formData.secondaryImage} setFormData={setFormData} />
 
-            <Button type="submit" disabled={isAdding} className="w-full">
-                {isAdding ? 'Adding Project...' : 'Add Project'}
-            </Button>
+            {
+                projectToEdit
+                    ? <span className="flex flex-col gap-3">
+                        <Button onClick={handleEdit} disabled={isUpdating} className="w-full disabled:cursor-not-allowed">
+                            {isUpdating ? 'Updating Project...' : 'Update Project'}
+                        </Button>
+                        <Button onClick={cancelEdit} disabled={isUpdating} variant="outline" className="w-full disabled:cursor-not-allowed">
+                            Cancel Edit
+                        </Button>
+                    </span>
+                    : <Button type="submit" disabled={isAdding} className="w-full disabled:cursor-not-allowed">
+                        {isAdding ? 'Adding Project...' : 'Add Project'}
+                    </Button>
+            }
         </form>
     )
 }

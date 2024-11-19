@@ -43,6 +43,23 @@ export const addProject = async ({ projectName, shortDescription, clientName, cl
     return response.json();
 };
 
+export const updateProject = async (id, { projectName, shortDescription, clientName, clientIntroduction, primaryImage, secondaryImage }) => {
+    const response = await fetch(`${BASE_URL}/caseStudies/update/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ projectName, shortDescription, clientName, clientIntroduction, primaryImage, secondaryImage }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+
+    return response.json();
+};
+
 export const deleteProject = async (id) => {
     const response = await fetch(`${BASE_URL}/caseStudies/delete/${id}`, {
         method: 'DELETE',

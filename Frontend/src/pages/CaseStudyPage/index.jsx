@@ -58,8 +58,8 @@ export default function CaseStudyPage() {
     }
 
     return (
-        <div className="scroll-smooth"> {/* Add scroll-smooth to parent */}
-            <div className="flex flex-col lg:flex-row w-full min-h-screen p-8 gap-12 relative md:pt-[18rem] 2xl:pt-[24rem]">
+        <div className="scroll-smooth">
+            <div className="flex flex-col lg:flex-row w-full min-h-screen p-8 gap-12 relative md:pt-[16rem] 2xl:pt-[23rem]">
                 <div className="absolute inset-0" />
                 <div className="flex-[1.3] relative text-white">
                     <h1 className="text-6xl font-bold uppercase font-oswald mb-4">{caseStudyProjects[currentSlide]?.title}</h1>

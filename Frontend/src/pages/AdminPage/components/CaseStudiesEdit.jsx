@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react"
 import {
@@ -22,10 +21,16 @@ const CaseStudiesEdit = () => {
     const [projects, setProjects] = useState([])
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [projectToDelete, setProjectToDelete] = useState(null)
+    const [projectToUpdate, setProjectToUpdate] = useState(null)
 
     const onDelete = async (id) => {
         setProjectToDelete(id)
         setShowDeleteDialog(true)
+    }
+
+    const onEdit = (id) => {
+        setProjectToUpdate(id)
+        // console.log(id);
     }
 
     const handleConfirmDelete = async () => {
@@ -53,7 +58,7 @@ const CaseStudiesEdit = () => {
     }, [])
 
     return (
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto scroll-smooth">
             {!loading && projects.length !== 0 &&
                 <h1 className="text-2xl text-center mt-6 block">
                     Added projects
@@ -61,11 +66,12 @@ const CaseStudiesEdit = () => {
             <ProjectsCarousel
                 loading={loading}
                 projects={projects}
-                onDelete={onDelete}
                 isDeleting={isDeletingCaseStudyProject}
-                setProjects={setProjects}
+                onDelete={onDelete}
+                onEdit={onEdit}
             />
-            <CaseStudyForm projects={projects} setProjects={setProjects} />
+            <hr />
+            <CaseStudyForm projects={projects} projectToEdit={projectToUpdate} setProjectToUpdate={setProjectToUpdate} setProjects={setProjects} />
 
             <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                 <AlertDialogContent>
