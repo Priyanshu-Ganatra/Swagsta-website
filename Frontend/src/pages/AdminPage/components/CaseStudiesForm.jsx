@@ -8,8 +8,7 @@ import ImageUpload from "./ImageUpload"
 import useAddCaseStudyProject from "../../../../hooks/useAddCaseStudyProject"
 import useUpdateCaseStudyProject from "../../../../hooks/useUpdateCaseStudyProject"
 
-
-export default function CaseStudyForm({ projectToEdit, setProjectToUpdate, projects, setProjects }) {
+export default function CaseStudyForm({ projectToEdit, setProjectToEdit, projects, setProjects }) {
     const { isAdding, addCaseStudyProject } = useAddCaseStudyProject()
     const { isUpdating, updateCaseStudyProject } = useUpdateCaseStudyProject()
 
@@ -69,7 +68,7 @@ export default function CaseStudyForm({ projectToEdit, setProjectToUpdate, proje
     const handleEdit = async (e) => {
         e.preventDefault()
         const res = await updateCaseStudyProject(projectToEdit, formData)
-        console.log(res.updatedProject);
+        // console.log(res.updatedProject);
         
         if (res.updatedProject) {            
             setProjects(projects.map(project => project._id === projectToEdit ? res.updatedProject : project))
@@ -81,13 +80,13 @@ export default function CaseStudyForm({ projectToEdit, setProjectToUpdate, proje
                 primaryImage: null,
                 secondaryImage: null
             })
-            setProjectToUpdate(null);
+            setProjectToEdit(null);
         }
     }
 
     const cancelEdit = (e) => {
         e.preventDefault()
-        setProjectToUpdate(null)
+        setProjectToEdit(null)
         setFormData({
             projectName: '',
             shortDescription: '',
@@ -99,7 +98,7 @@ export default function CaseStudyForm({ projectToEdit, setProjectToUpdate, proje
     }
 
     return (
-        <form onSubmit={handleSubmit} id="caseStudyForm" className="space-y-8 max-w-2xl mx-auto p-6">
+        <form onSubmit={handleSubmit} id="form" className="space-y-8 max-w-2xl mx-auto p-6">
             <h1 className="text-2xl text-center">{
                 projectToEdit
                     ? 'Editing Project'

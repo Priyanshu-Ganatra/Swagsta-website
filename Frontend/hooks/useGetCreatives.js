@@ -14,6 +14,7 @@ export default function useGetCreatives() {
         try {
             const data = await getAllCreativesApi()
             dispatch(setCreativesAction({ loading: false, creatives: data }))
+            return data
         } catch (error) {
             toast.error(error.message)
         }

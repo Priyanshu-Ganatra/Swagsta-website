@@ -61,7 +61,7 @@ const CaseStudiesEdit = () => {
         <div className="max-w-2xl mx-auto scroll-smooth">
             {!loading && projects.length !== 0 &&
                 <h1 className="text-2xl text-center mt-6 block">
-                    Added projects
+                    Added Projects
                 </h1>}
             <ProjectsCarousel
                 loading={loading}
@@ -70,8 +70,8 @@ const CaseStudiesEdit = () => {
                 onDelete={onDelete}
                 onEdit={onEdit}
             />
-            <hr />
-            <CaseStudyForm projects={projects} projectToEdit={projectToUpdate} setProjectToUpdate={setProjectToUpdate} setProjects={setProjects} />
+            {!loading && projects.length !== 0 && <hr />}
+            <CaseStudyForm projects={projects} projectToEdit={projectToUpdate} setProjectToEdit={setProjectToUpdate} setProjects={setProjects} />
 
             <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                 <AlertDialogContent>

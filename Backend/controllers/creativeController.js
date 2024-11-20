@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'; 
+import jwt from 'jsonwebtoken';
 import Creative from "../models/creativeModel.js";
 import CreativeComment from "../models/creativeCommentModel.js";
 import { uploadImageToCloudinary, uploadVideoToCloudinary } from "../utils/uploadToCloudinary.js";
@@ -65,7 +65,7 @@ export const addCreative = async (req, res) => {
         });
 
         await newCreative.save();
-        res.status(201).json({ message: "Creative added successfully", success: true });
+        res.status(201).json({ message: "Creative added successfully", success: true, addedCreative: newCreative });
     } catch (error) {
         console.log("Error in addCreative controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });
@@ -156,7 +156,51 @@ export const addComment = async (req, res) => {
 
 export const updateCreative = async (req, res) => {
     try {
+        const { id } = req.params;
+        const creative = await Creative.findById(id);
 
+        if (!creative) {
+            return res.status(404).json({ message: "Creative not found" });
+        }
+
+        let { name, profession, title, description, software, tags, profilePicture, coverImage, otherMedia } = req.body;
+        console.log("🚀 ~ updateCreative ~ coverImage:", coverImage)
+
+        if (tags.length === 0 || software.length === 0 || otherMedia.length === 0 || !name || !profession || !title || !description || !profilePicture || !coverImage) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        // make each software lowercase
+        for (let i = 0; i < software.length; i++) {
+            software[i] = software[i].toLowerCase();
+        }
+
+        let creatorProfilePic = profilePicture
+        let coverImg = coverImage
+        try {
+            if (!profilePicture.includes("cloudinary")) creatorProfilePic = await uploadMedia(profilePicture)
+            if (!coverImage.includes("cloudinary")) coverImg = await uploadMedia(coverImage)
+
+            for (let i = 0; i < otherMedia.length; i++) {
+                if (!otherMedia[i].includes("cloudinary")) otherMedia[i] = await uploadMedia(otherMedia[i]);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+        creative.creatorName = name;
+        creative.creatorProfession = profession;
+        creative.creatorProfilePic = creatorProfilePic;
+        creative.title = title;
+        creative.description = description;
+        creative.softwareUsed = software;
+        creative.coverImg = coverImg;
+        creative.otherMedia = otherMedia;
+        creative.tags = tags;
+
+        const updatedCreative = await creative.save();
+
+        res.status(200).json({ message: "Creative updated successfully", success: true, updatedCreative });
     } catch (error) {
         console.log("Error in updateCreative controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });
@@ -165,7 +209,15 @@ export const updateCreative = async (req, res) => {
 
 export const deleteCreative = async (req, res) => {
     try {
+        const { id } = req.params;
+        const creative = await Creative.findById(id);
 
+        if (!creative) {
+            return res.status(404).json({ message: "Creative not found" });
+        }
+
+        await Creative.findByIdAndDelete(id);
+        res.status(200).json({ message: "Creative deleted successfully", success: true });
     } catch (error) {
         console.log("Error in deleteCreative controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });

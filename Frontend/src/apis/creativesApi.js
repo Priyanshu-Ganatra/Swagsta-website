@@ -52,18 +52,18 @@ export const addComment = async ({ text, creativeId }) => {
 //     return response.json();
 // }
 
-// export const deleteProject = async (id) => {
-//     const response = await fetch(`${BASE_URL}/projects/delete/${id}`, {
-//         method: 'DELETE',
-//     });
+export const deleteCreative = async (id) => {
+    const response = await fetch(`${BASE_URL}/creative/delete/${id}`, {
+        method: 'DELETE',
+    });
 
-//     if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.message);
-//     }
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
 
-//     return response.json();
-// };
+    return response.json();
+};
 
 export const getAllCreatives = async () => {
     const response = await fetch(`${BASE_URL}/creative/getAll`, {
@@ -91,19 +91,19 @@ export const getOneCreative = async (id) => {
     return response.json();
 }
 
-// export const updateProject = async (id, updatedProject) => {
-//     const response = await fetch(`${BASE_URL}/projects/update/${id}`, {
-//         method: 'PUT',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(updatedProject),
-//     });
+export const updateCreative = async (id, updatedCreativeData) => {
+    const response = await fetch(`${BASE_URL}/creative/update/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedCreativeData),
+    });
 
-//     if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.message);
-//     }
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
 
-//     return response.json();
-// };
+    return response.json();
+};

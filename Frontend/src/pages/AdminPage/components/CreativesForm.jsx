@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -8,10 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { X, Upload } from 'lucide-react'
 import useAddCreative from '../../../../hooks/useAddCreative'
+import useUpdateCreative from '../../../../hooks/useUpdateCreative'
 
 const softwareOptions = ['PureRef', 'ZBrush', 'Maya', 'Blender', 'Photoshop']
 
-export default function CreativeForm() {
+export default function CreativeForm({ creatives, creativeToEdit, setCreativeToEdit, setCreatives }) {
+    const { isUpdating, updateCreative } = useUpdateCreative()
     const [name, setName] = useState('')
     const [profession, setProfession] = useState('')
     const [title, setTitle] = useState('')
@@ -108,6 +110,10 @@ export default function CreativeForm() {
         if (result.success) {
             clearForm()
         }
+
+        if (result.addedCreative) {
+            setCreatives([...creatives, result.addedCreative])
+        }
     }
 
     const FileUploadArea = ({ id, accept, multiple, onChange, inputRef, text, subtext, preview }) => (
@@ -134,7 +140,17 @@ export default function CreativeForm() {
     )
 
     const ImagePreview = ({ file }) => {
+        // console.log(file);
+
         if (!file) return null
+
+        if (file.length) {
+            return (
+                <div className="mt-4">
+                    <img src={file} alt="Preview" className="max-w-full h-auto rounded-lg" />
+                </div>)
+        }
+
         return (
             <div className="mt-4">
                 <img src={URL.createObjectURL(file)} alt="Preview" className="max-w-full h-auto rounded-lg" />
@@ -147,21 +163,121 @@ export default function CreativeForm() {
         return (
             <div className="mt-4 grid grid-cols-2 gap-4">
                 {files.map((file, index) => (
-                    <div key={index}>
-                        {file.type.startsWith('image/') ? (
-                            <img src={URL.createObjectURL(file)} alt={`Preview ${index + 1}`} className="max-w-full h-auto rounded-lg" />
-                        ) : (
-                            <video src={URL.createObjectURL(file)} controls className="max-w-full h-auto rounded-lg" />
-                        )}
-                    </div>
+                    file.length ?
+                        <div key={index}>
+                            {file.includes('image/') ? (
+                                <img src={file} alt={`Preview ${index + 1}`} className="max-w-full h-auto rounded-lg" />
+                            ) : (
+                                <video src={file} controls className="max-w-full h-auto rounded-lg" />
+                            )}
+                        </div>
+                        :
+                        <div key={index}>
+                            {file.type.startsWith('image/') ? (
+                                <img src={URL.createObjectURL(file)} alt={`Preview ${index + 1}`} className="max-w-full h-auto rounded-lg" />
+                            ) : (
+                                <video src={URL.createObjectURL(file)} controls className="max-w-full h-auto rounded-lg" />
+                            )}
+                        </div>
                 ))}
             </div>
         )
     }
 
+    useEffect(() => {
+        if (creativeToEdit) {
+            // get the creative to edit from the creatives array
+            const creative = creatives.find(creative => creative._id === creativeToEdit)
+            // console.log(creative);
+
+            if (creative) {
+                setName(creative.creatorName)
+                setProfession(creative.creatorProfession)
+                setTitle(creative.title)
+                setDescription(creative.description)
+                setSoftware(creative.softwareUsed)
+                setTags(creative.tags)
+                setProfilePicture(null)
+                setCoverImage(null)
+                setOtherMedia([])
+
+                if (creative.creatorProfilePic) {
+                    setProfilePicture(creative.creatorProfilePic)
+                }
+
+                if (creative.coverImg) {
+                    setCoverImage(creative.coverImg)
+                }
+
+                if (creative.otherMedia) {
+                    setOtherMedia(creative.otherMedia)
+                }
+            }
+        }
+    }, [creativeToEdit, creatives]);
+
+    const handleEdit = async (e) => {
+        e.preventDefault()
+
+        let profilePictureBase64 = null
+        let coverImageBase64 = null
+
+        if (typeof profilePicture === 'object') {
+            profilePictureBase64 = await convertToBase64(profilePicture)
+        }
+
+        if (typeof coverImage === 'object') {
+            coverImageBase64 = await convertToBase64(coverImage)
+        }
+
+        for (let i = 0; i < otherMedia.length; i++) {
+            if (typeof otherMedia[i] === 'object') otherMedia[i] = await convertToBase64(otherMedia[i]);
+        }
+
+        // console.log({
+        //     name,
+        //     profession,
+        //     title,
+        //     description,
+        //     software,
+        //     tags,
+        //     profilePicture: typeof profilePicture === 'object' ? profilePictureBase64 : profilePicture,
+        //     coverImage: typeof coverImage === 'object' ? coverImageBase64 : coverImage,
+        //     otherMedia
+        // });
+
+        const res = await updateCreative(creativeToEdit, {
+            name,
+            profession,
+            title,
+            description,
+            software,
+            tags,
+            profilePicture: typeof profilePicture === 'object' ? profilePictureBase64 : profilePicture,
+            coverImage: typeof coverImage === 'object' ? coverImageBase64 : coverImage,
+            otherMedia
+        })
+
+        if (res.updatedCreative) {
+            setCreatives(creatives.map(creative => creative._id === creativeToEdit ? res.updatedCreative : creative))
+            clearForm()
+            setCreativeToEdit(null);
+        }
+    }
+
+    const cancelEdit = (e) => {
+        e.preventDefault()
+        setCreativeToEdit(null)
+        clearForm()
+    }
+
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto p-6 bg-white">
-            <h1 className="text-2xl text-center mb-6">Add a creative</h1>
+        <form onSubmit={handleSubmit} id='form' className="space-y-6 max-w-2xl mx-auto p-6 bg-white">
+            <h1 className="text-2xl text-center mb-6">
+                {
+                    creativeToEdit ? 'Editing Creative' : 'Add New Creative'
+                }
+            </h1>
 
             <div>
                 <Label htmlFor="name">Creator&apos;s Name</Label>
@@ -291,9 +407,18 @@ export default function CreativeForm() {
                 </div>
             </div>
 
-            <Button type="submit" disabled={isAdding} className="w-full active:scale-95 transition-transform">
-                {isAdding ? 'Adding creative...' : 'Add creative'}
-            </Button>
+            {
+                creativeToEdit ? <span className="flex flex-col gap-3">
+                    <Button onClick={handleEdit} disabled={isUpdating} className="w-full disabled:cursor-not-allowed">
+                        {isUpdating ? 'Updating Creative...' : 'Update Creative'}
+                    </Button>
+                    <Button onClick={cancelEdit} disabled={isUpdating} variant="outline" className="w-full disabled:cursor-not-allowed">
+                        Cancel Edit
+                    </Button>
+                </span> : <Button type="submit" disabled={isAdding} className="w-full active:scale-95 transition-transform">
+                    {isAdding ? 'Adding creative...' : 'Add Creative'}
+                </Button>
+            }
         </form>
     )
 }
