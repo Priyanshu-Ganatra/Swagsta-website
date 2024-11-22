@@ -7,7 +7,7 @@ import ContactUsForm from '@/pages/AdminPage/components/ContactUsForm'
 import AboutUsForm from '@/pages/AdminPage/components/AboutUsForm'
 import CaseStudiesEdit from '@/pages/AdminPage/components/CaseStudiesEdit'
 import PortfolioEdit from './components/PortfolioEdit'
-import StoreProjectsForm from '@/pages/AdminPage/components/StoreProjectsForm'
+import StoreEdit from './components/StoreEdit'
 import useGetAboutUsData from '../../../hooks/useGetAboutUsData'
 
 export default function AdminPage() {
@@ -176,7 +176,7 @@ export default function AdminPage() {
                     selectedPage === "portfolio" && <PortfolioEdit />
                 }
                 {
-                    selectedPage === "store" && <StoreProjectsForm />
+                    selectedPage === "store" && <StoreEdit />
                 }
             </div>
 

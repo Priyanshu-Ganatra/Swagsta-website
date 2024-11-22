@@ -13,14 +13,14 @@ export const addProject = async (req, res) => {
     try {
         const { title, technicalDetails, price, credits, storyline, category, isFeatured, coverImage, otherImages } = req.body;
 
-        console.log(req.body);
+        // console.log(req.body);
 
         if (!title || !technicalDetails || !price || !credits.length || !storyline || !category) {
-            return res.status(400).json({ message: "Please fill all fields", success: true });
+            return res.status(400).json({ message: "Please fill all fields", success: false });
         }
 
         if (!coverImage || !otherImages.length) {
-            return res.status(400).json({ message: "Please upload all images", success: true });
+            return res.status(400).json({ message: "Please upload all images", success: false });
         }
 
         const uploadedCoverImg = await uploadImageToCloudinary(
@@ -46,12 +46,74 @@ export const addProject = async (req, res) => {
 
         const newProject = new Project(dataToStore);
 
-        await newProject.save();
+        const addedProject = await newProject.save();
 
-        res.status(201).json({ message: "Project added successfully", success: true });
+        res.status(201).json({ message: "Project added successfully", success: true, addedProject });
     } catch (error) {
         console.log("Error in addProject controller", error.message);
         res.status(500).json({ message: "Internal Server Error", success: false });
+    }
+}
+
+export const updateProject = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, likes, price, credits, techDetails, coverImg, category, featured, storyLine, otherImages } = req.body;
+        
+        if (!title || !techDetails || !price || !credits.length || !storyLine || !category) {
+            return res.status(400).json({ message: "Please fill in all fields", success: false });
+            
+        }
+
+        if (!coverImg || !otherImages.length) {
+            return res.status(400).json({ message: "Please upload all images", success: false });
+        }
+
+        const project = await Project.findById(id);
+
+        if (!project) {
+            return res.status(404).json({ message: "Project not found", success: false });
+        }
+
+        project.title = title;
+        project.likes = likes;
+        project.price = price;
+        project.credits = credits;
+        project.techDetails = techDetails;
+        project.category = category;
+        project.featured = featured;
+        project.storyLine = storyLine;
+
+        if (!coverImg.includes("cloudinary")) {
+            const uploadedCoverImg = await uploadImageToCloudinary(
+                coverImg,
+                process.env.FOLDER_NAME,
+                1000,
+                1000
+            );
+
+            project.coverImg = uploadedCoverImg.secure_url;
+        }
+
+        for (let i = 0; i < otherImages.length; i++) {
+            if (!otherImages[i].includes("cloudinary")) {
+                const uploadedImg = await uploadImageToCloudinary(
+                    otherImages[i],
+                    process.env.FOLDER_NAME,
+                    1000,
+                    1000
+                );
+
+                otherImages[i] = uploadedImg.secure_url;
+            }
+        }
+
+        const updatedProject = await project.save();
+
+        res.status(200).json({ message: "Project updated successfully", updatedProject, success: true });
+    } catch (error) {
+        console.log("Error in updateProject controller", error.message);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
@@ -157,53 +219,17 @@ export const addComment = async (req, res) => {
     }
 }
 
-export const updateProject = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { title, likes, price, credits, techDetails, coverImg, category, featured, storyLine, otherImages } = req.body;
-
-        const parsedOtherImages = JSON.parse(otherImages);
-        const parsedCredits = JSON.parse(credits);
-
-        const project = await Project.findById(id);
-
-        if (!project) {
-            return res.status(404).json({ message: "project not found" });
-        }
-
-        project.title = title;
-        project.likes = likes;
-        project.price = price;
-        project.credits = parsedCredits;
-        project.techDetails = techDetails;
-        project.coverImg = coverImg;
-        project.category = category;
-        project.featured = featured;
-        project.storyLine = storyLine;
-        project.otherImages = parsedOtherImages;
-
-        await project.save();
-
-        res.status(200).json({ message: "Project updated successfully" });
-    } catch (error) {
-        console.log("Error in updateProject controller", error.message);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
-}
-
 export const deleteProject = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const project = await Project.findById(id);
+        const project = await Project.findByIdAndDelete(id);
 
         if (!project) {
             return res.status(404).json({ message: "Project not found" });
         }
 
-        await project.remove();
-
-        res.status(200).json({ message: "Project deleted successfully" });
+        res.status(200).json({ message: "Project deleted successfully", success: true });
     } catch (error) {
         console.log("Error in deleteProject controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });

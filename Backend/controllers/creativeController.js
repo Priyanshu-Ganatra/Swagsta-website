@@ -164,7 +164,7 @@ export const updateCreative = async (req, res) => {
         }
 
         let { name, profession, title, description, software, tags, profilePicture, coverImage, otherMedia } = req.body;
-        console.log("🚀 ~ updateCreative ~ coverImage:", coverImage)
+        // console.log("🚀 ~ updateCreative ~ coverImage:", coverImage)
 
         if (tags.length === 0 || software.length === 0 || otherMedia.length === 0 || !name || !profession || !title || !description || !profilePicture || !coverImage) {
             return res.status(400).json({ message: "All fields are required" });

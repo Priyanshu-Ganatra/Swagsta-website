@@ -14,6 +14,7 @@ export default function useGetProjects() {
         try {
             const data = await getAllProjectsApi()
             dispatch(setProjectsAction({ loading: false, projects: data }))
+            return data
         } catch (error) {
             toast.error(error.message)
         }

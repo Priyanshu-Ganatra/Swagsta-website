@@ -12,7 +12,7 @@ router.get('/get/:id', getProject);
 
 router.post('/addCommentOn/:id', addComment);
 
-router.put('/update/:id', updateProject);
+router.patch('/update/:id', updateProject);
 
 router.delete('/delete/:id', deleteProject);
 

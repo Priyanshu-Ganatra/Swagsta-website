@@ -93,13 +93,14 @@ export const getOneProject = async (id) => {
 
 export const updateProject = async (id, updatedProject) => {
     const response = await fetch(`${BASE_URL}/projects/update/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedProject),
     });
 
+    console.log("🚀 ~ updateProject ~ response:", response)
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message);

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { X, Upload } from "lucide-react"
 import useAddStoreProject from '../../../../hooks/useAddStoreProject'
+import useUpdateProject from '../../../../hooks/useUpdateStoreProject'
 
 const ImageUpload = ({ id, label, multiple, images, setImages }) => {
   const handleDrop = (e) => {
@@ -94,8 +95,9 @@ const ImageUpload = ({ id, label, multiple, images, setImages }) => {
   )
 }
 
-export default function Component() {
+export default function StoreProjectsForm({ projectToEdit, setProjectToEdit, projects, setProjects }) {
   const { isAdding, addStoreProject } = useAddStoreProject()
+  const { isUpdating, updateProject } = useUpdateProject()
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('')
   const [technicalDetails, setTechnicalDetails] = useState('')
@@ -106,6 +108,76 @@ export default function Component() {
   const [storyline, setStoryline] = useState('')
   const [isFeatured, setIsFeatured] = useState(false)
   const creditInputRef = useRef(null)
+
+  useEffect(() => {
+    if (projectToEdit) {
+      // get the project to edit from the projects array
+      const project = projects.find(project => project._id === projectToEdit)
+      setTitle(project.title)
+      setCategory(project.category)
+      setTechnicalDetails(project.techDetails)
+      setCoverImage(project.coverImg)
+      setPrice(project.price)
+      setOtherImages(project.otherImages)
+      setCredits(project.credits)
+      setStoryline(project.storyLine)
+      setIsFeatured(project.featured)
+    }
+  }, [projectToEdit, projects]);
+
+  const getNoOfLikes = (id) => {
+    const project = projects.find(project => {
+      return project._id === id
+    })
+    
+    return project.likedBy.length
+  }
+
+  const handleEdit = async (e) => {
+    e.preventDefault() 
+    const res = await updateProject(projectToEdit, {
+      title,
+      category,
+      techDetails: technicalDetails,
+      coverImg: coverImage,
+      price,
+      otherImages,
+      credits,
+      storyLine: storyline,
+      featured: isFeatured,
+      likes: getNoOfLikes(projectToEdit)
+    })
+
+    if (res.updatedProject) {
+      setProjects(projects.map(project => project._id === projectToEdit ? res.updatedProject : project))
+      setProjectToEdit(null)
+      setTitle('')
+      setCategory('')
+      setTechnicalDetails('')
+      setCoverImage(null)
+      setPrice('')
+      setOtherImages([])
+      setCredits([])
+      setStoryline('')
+      setIsFeatured(false)
+    }
+  }
+
+  const cancelEdit = (e) => {
+    e.preventDefault()
+    setProjectToEdit(null)
+
+    setTitle('')
+    setCategory('')
+    setTechnicalDetails('')
+    setCoverImage(null)
+    setPrice('')
+    setOtherImages([])
+    setCredits([])
+    setStoryline('')
+    setIsFeatured(false)
+
+  }
 
   const handleCreditKeyDown = (e) => {
     if (e.key === 'Enter' && creditInputRef.current.value) {
@@ -139,14 +211,20 @@ export default function Component() {
         setStoryline('')
         setIsFeatured(false)
         creditInputRef.current.value = ''
+
+        setProjects([...projects, data.addedProject])
       }
     }
     )
-  }, [title, category, technicalDetails, coverImage, price, otherImages, credits, storyline, isFeatured, addStoreProject])
+  }, [addStoreProject, title, category, technicalDetails, coverImage, price, otherImages, credits, storyline, isFeatured, setProjects, projects])
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl text-center mb-6">Add a project</h1>
+    <form onSubmit={handleSubmit} id="form" className="space-y-6 max-w-2xl mx-auto p-6">
+      <h1 className="text-2xl text-center mb-6">{
+        projectToEdit
+          ? 'Editing Project'
+          : 'Add New Project'
+      }</h1>
 
       <div className="space-y-2">
         <label htmlFor="title" className="text-sm font-medium">Title</label>
@@ -251,10 +329,20 @@ export default function Component() {
         />
         <label htmlFor="isFeatured" className="text-sm font-medium">Is featured?</label>
       </div>
-
-      <Button type="submit" className="w-full" disabled={isAdding}>
-        {isAdding ? 'Adding project...' : 'Add project'}
-      </Button>
+      {
+        projectToEdit
+          ? <span className="flex flex-col gap-3">
+            <Button onClick={handleEdit} disabled={isUpdating} className="w-full disabled:cursor-not-allowed">
+              {isUpdating ? 'Updating Project...' : 'Update Project'}
+            </Button>
+            <Button onClick={cancelEdit} disabled={isUpdating} variant="outline" className="w-full disabled:cursor-not-allowed">
+              Cancel Edit
+            </Button>
+          </span>
+          : <Button type="submit" disabled={isAdding} className="w-full disabled:cursor-not-allowed">
+            {isAdding ? 'Adding Project...' : 'Add Project'}
+          </Button>
+      }
     </form>
   )
 }
