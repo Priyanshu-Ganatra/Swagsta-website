@@ -14,10 +14,16 @@ import ServicesPage from './pages/ServicesPage';
 import ContactUs from './pages/ContactUsPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
 import AdminPage from './pages/AdminPage';
 import { Provider } from 'react-redux';
 import ProfilePage from './pages/ProfilePage/index.jsx';
 import CreativePage from './pages/CreativePage/index.jsx';
+import Collections from './pages/ProfilePage/Collections.jsx';
+import Profile from './pages/ProfilePage/Profile.jsx';
+import Orders from './pages/ProfilePage/Orders.jsx';
+import Wishlist from './pages/ProfilePage/Wishlist.jsx';
+import PaymentsHistory from './pages/ProfilePage/PaymentsHistory.jsx';
 
 const router = createBrowserRouter([
   {
@@ -70,8 +76,34 @@ const router = createBrowserRouter([
         element: <SignupPage />,
       },
       {
+        path: '/verify-email',
+        element: <VerifyEmailPage />,
+      },
+      {
         path: '/profile',
         element: <ProfilePage />,
+        children: [
+          {
+            path: 'data',
+            element: <Profile />,
+          },
+          {
+            path: 'collections',
+            element: <Collections />,
+          },
+          {
+            path: 'orders',
+            element: <Orders />,
+          },
+          {
+            path: 'wishlist',
+            element: <Wishlist />,
+          },
+          {
+            path: 'payments-history',
+            element: <PaymentsHistory />,
+          },
+        ]
       },
     ],
   },

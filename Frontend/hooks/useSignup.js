@@ -10,13 +10,15 @@ export default function useSignup() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const signup = async ({ fullName, email, password, confirmPassword }) => {
-        const success = handleInputErrors({ fullName, email, password, confirmPassword })
+    const signup = async ({ fullName, email, password, confirmPassword, otp }) => {
+        const success = handleInputErrors({ fullName, email, password, confirmPassword, otp })
         if (!success) return
         
         setLoading(true);
         try {
-            const data = await signupApi({ fullName, email, password });
+            console.log('Before send ing req: ', { fullName, email, password, otp });
+            
+            const data = await signupApi({ fullName, email, password, otp });
             
             if (data.savedUser === undefined) {
                 throw new Error(data.message)
@@ -37,7 +39,7 @@ export default function useSignup() {
     return { loading, signup };
 }
 
-function handleInputErrors({ fullName, email, password, confirmPassword }) {
+function handleInputErrors({ fullName, email, password, confirmPassword, otp }) {
     if (!fullName || !email || !password || !confirmPassword) {
         toast.error('Please fill every field')
         return false
@@ -45,6 +47,11 @@ function handleInputErrors({ fullName, email, password, confirmPassword }) {
 
     if (password !== confirmPassword) {
         toast.error('Passwords do not match')
+        return false
+    }
+
+    if (!otp) {
+        toast.error('OTP missing')
         return false
     }
 

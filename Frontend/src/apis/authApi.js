@@ -1,18 +1,35 @@
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-export const signup = async ({ fullName, email, password }) => {
+export const signup = async (dataToSend) => {
     const response = await fetch(`${BASE_URL}/auth/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fullName, email, password }),
+        body: JSON.stringify(dataToSend),
     });
 
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message);
     }
+
+    return response.json();
+};
+
+export const sendEmailOtp = async (email) => {
+    const response = await fetch(`${BASE_URL}/auth/sendotp`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email}),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error);
+    }    
 
     return response.json();
 };

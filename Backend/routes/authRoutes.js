@@ -1,4 +1,4 @@
-import { signup, login, logout } from '../controllers/authController.js';
+import { signup, login, logout, sendotp } from '../controllers/authController.js';
 import passport from 'passport';
 import express from 'express';
 import { generateTokenAndSetCookie } from '../lib/utils/generateToken.js';
@@ -29,6 +29,8 @@ router.get(
 );
 
 router.post('/signup', signup);
+
+router.post("/sendotp", sendotp)
 
 router.post('/login', login);
 

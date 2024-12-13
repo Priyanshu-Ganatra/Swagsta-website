@@ -17,7 +17,7 @@ const NavLinks = ({ setIsMenuOpen, isMobile }) => {
             <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/store'}>Store</NavLink>
             {
                 isLoggedIn ?
-                    <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/profile'}>Profile</NavLink>
+                    <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/profile/data'}>Profile</NavLink>
                     :
                     <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/login'}>Login</NavLink>
             }
