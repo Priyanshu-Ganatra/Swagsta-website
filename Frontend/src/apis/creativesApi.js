@@ -107,3 +107,20 @@ export const updateCreative = async (id, updatedCreativeData) => {
 
     return response.json();
 };
+
+export const addToCollection = async (creativeId, collectionId) => {
+    const response = await fetch(`${BASE_URL}/creative/addToCollection/${creativeId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ collectionId }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+
+    return response.json();
+}

@@ -27,3 +27,16 @@ export const getCollections = async (userId) => {
 
     return response.json();
 }
+
+export const removeFromCollection = async (creativeId, collectionId) => {
+    const response = await fetch(`${BASE_URL}/profile/collections/remove/${creativeId}/from/${collectionId}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
+
+    return response.json();
+}

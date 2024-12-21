@@ -19,7 +19,7 @@ const useSendEmailOtp = () => {
             dispatch(setOtp(data.otp))
             navigate('/verify-email')
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.message, { position: 'top-left' })
         }
         finally {
             setLoading(false)

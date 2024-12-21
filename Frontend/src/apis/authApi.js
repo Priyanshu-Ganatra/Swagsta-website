@@ -7,6 +7,7 @@ export const signup = async (dataToSend) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(dataToSend),
+        credentials: 'include'
     });
 
     if (!response.ok) {
@@ -41,6 +42,7 @@ export const login = async (loginData) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(loginData),
+        credentials: 'include'
     });
 
     if (!response.ok) {

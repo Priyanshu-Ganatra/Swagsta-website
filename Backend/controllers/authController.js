@@ -73,7 +73,7 @@ export const sendotp = async (req, res) => {
             // Return 401 Unauthorized status code with error message
             return res.status(401).json({
                 success: false,
-                error: `User is Already Registered`,
+                error: `This e-mail is already registered, use a different e-mail or login instead`,
             })
         }
 

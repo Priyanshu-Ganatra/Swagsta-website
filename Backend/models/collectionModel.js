@@ -12,6 +12,7 @@ const collectionSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Creative",
             },
+            _id: false,
         },
     ],
 },

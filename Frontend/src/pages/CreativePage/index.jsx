@@ -87,7 +87,7 @@ const CreativePage = () => {
           {
             !isMobile && <ArtistCard data={data} isMobile={isMobile} />
           }
-          <LikeAndSave className={`${!isMobile && 'mt-6'}`} />
+          <LikeAndSave className={`${!isMobile && 'mt-6'}`} creativeId={id} creative={data}/>
           <CreativeDescription data={data} />
           <CreativeStatsAndSocials data={data} className={'mt-4'} />
           <SoftwareUsed data={data} className={'mt-10'} />

@@ -19,9 +19,9 @@ export default function LoginPage() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        login({ email, password })
+        await login({ email, password })
     }
 
     useEffect(() => {

@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { addNewCollection as addNewCollectionApi } from "../src/apis/profileApi";
+import { addToCollection as addToCollectionApi } from "../src/apis/creativesApi";
 
-export default function useAddNewCollection() {
+export default function useAddToCollection() {
     const [isAdding, setisAdding] = useState(false);
 
-    const addNewCollection = async (formData) => {
+    const addToCollection = async (creativeId, collectionId) => {
         setisAdding(true);
         try {
-            const data = await addNewCollectionApi(formData);
+            const data = await addToCollectionApi(creativeId, collectionId);
             toast.success(data.message)
             return data
         } catch (error) {
@@ -18,5 +18,5 @@ export default function useAddNewCollection() {
         }
     };
 
-    return { isAdding, addNewCollection };
+    return { isAdding, addToCollection };
 }

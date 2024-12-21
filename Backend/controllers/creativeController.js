@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 import Creative from "../models/creativeModel.js";
+import Collection from "../models/collectionModel.js";
 import CreativeComment from "../models/creativeCommentModel.js";
 import { uploadImageToCloudinary, uploadVideoToCloudinary } from "../utils/uploadToCloudinary.js";
+import mongoose from 'mongoose';
 
 async function uploadMedia(mediaUrl) {
     // Extract the MIME type from the data URL
@@ -153,6 +155,38 @@ export const addComment = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export const addToCollection = async (req, res) => {
+    try {
+        const { id } = req.params; // Creative ID
+        const { collectionId } = req.body;
+
+        if(!collectionId || !id) {
+            return res.status(400).json({ message: "Please provide collection and creative IDs" });
+        }
+
+        const collection = await Collection.findById(collectionId);
+
+        if(collection.creatives.find(creative => creative.creativeId.toString() === id)) {
+            return res.status(400).json({ message: "Already exists in this collection" });
+        }
+
+        if (!collection) {
+            return res.status(404).json({ message: "Collection not found" });
+        }
+
+        const addedCreative = await Collection.findByIdAndUpdate(
+            collectionId,
+            { $push: { creatives: { creativeId: new mongoose.Types.ObjectId(id) } } },
+            { new: true }
+        );
+
+        res.status(200).json({ message: "Added to collection successfully", success: true, addedCreative });
+    } catch (error) {
+        console.log("Error in addToCollection controller", error.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
 
 export const updateCreative = async (req, res) => {
     try {
