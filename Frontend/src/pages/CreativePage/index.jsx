@@ -25,7 +25,7 @@ const CreativePage = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [comments, setComments] = useState([])
   const { id } = useParams()
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
   const { loading, getOneCreative } = useGetOneCreative()
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const CreativePage = () => {
           {
             !isMobile && <ArtistCard data={data} isMobile={isMobile} />
           }
-          <LikeAndSave className={`${!isMobile && 'mt-6'}`} creativeId={id} creative={data}/>
+          <LikeAndSave className={`${!isMobile && 'mt-6'}`} creativeId={id} creative={data} setCreative={setData}/>
           <CreativeDescription data={data} />
           <CreativeStatsAndSocials data={data} className={'mt-4'} />
           <SoftwareUsed data={data} className={'mt-10'} />

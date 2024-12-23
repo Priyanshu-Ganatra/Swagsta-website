@@ -12,7 +12,7 @@ router.post('/addCommentOn/:id', addComment);
 
 router.post('/addToCollection/:id', addToCollection);
 
-router.patch('/like', likeCreative);
+router.patch('/like/:id', likeCreative);
 
 router.patch('/update/:id', updateCreative);
 

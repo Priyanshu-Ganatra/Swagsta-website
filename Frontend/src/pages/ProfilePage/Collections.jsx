@@ -11,6 +11,17 @@ import { PiEmptyThin } from "react-icons/pi";
 import useGetCollections from "../../../hooks/useGetCollections";
 import AddNewCollection from "@/components/AddNewCollection";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -23,15 +34,26 @@ import { Trash2 } from "lucide-react";
 import { limitWords } from "@/utils/limitWords";
 import { Link } from "react-router-dom";
 import useRemoveFromCollection from "../../../hooks/useRemoveFromCollection";
+import useDeleteCollection from "../../../hooks/useDeleteCollection";
 
 const Collections = () => {
   const [collections, setCollections] = useState([]);
   const { isFetchingCollections, getCollections } = useGetCollections();
   const { isRemoving, removeFromCollection } = useRemoveFromCollection();
+  const { isDeletingCollection, deleteCollection } = useDeleteCollection();
+
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
+  const [collectionToDelete, setCollectionToDelete] = useState(null);
+
   const user = JSON.parse(localStorage.getItem('user'));
 
   const handleRemove = async (creativeId, collectionId) => {
     await removeFromCollection(creativeId, collectionId, setCollections);
+  }
+
+  const handleDelete = async (collectionId) => {
+    setAlertDialogOpen(false);
+    await deleteCollection(collectionId, setCollections);
   }
 
   useEffect(() => {
@@ -69,6 +91,23 @@ const Collections = () => {
                       <p className="text-white mt-auto">{collection.name}</p>
                       <p className="text-[10px] leading-none font-semibold text-white/90">{collection.creatives.length} saved</p>
                     </CardFooter>
+                    <Button
+                      variant="outline"
+                      className="group/delete absolute top-2 right-2 opacity-0 group-hover:opacity-100"
+                      size="icon"
+                      disabled={isDeletingCollection}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCollectionToDelete(collection._id);
+                        setAlertDialogOpen(true);
+                      }}
+                    >
+                      {isDeletingCollection ? (
+                        <Trash2 className="text-red-500 animate-spin" />
+                      ) : (
+                        <Trash2 className="text-red-500 group-hover/delete:scale-125 transition-all ease-in duration-75" />
+                      )}
+                    </Button>
                   </Card>
                 </DialogTrigger>
 
@@ -109,7 +148,7 @@ const Collections = () => {
                                     }}
                                   >
                                     {
-                                      isRemoving ? <Trash2 className="animate-spin" /> : <Trash2 className="group-hover/delete:scale-125 transition-all ease-in duration-75" />
+                                      isRemoving ? <Trash2 className="animate-spin text-red-500" /> : <Trash2 className="text-red-500 group-hover/delete:scale-125 transition-all ease-in duration-75" />
                                     }
                                   </Button>
                                 </Card>
@@ -126,6 +165,29 @@ const Collections = () => {
             </div>
           ))
         }
+
+        <AlertDialog open={alertDialogOpen} onOpenChange={setAlertDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this collection? This
+                action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={(e) => handleDelete(collectionToDelete)}
+                className="bg-red-500 hover:bg-red-600"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* add new collection card */}
         <AddNewCollection collections={collections} setCollections={setCollections} />

@@ -76,7 +76,30 @@ export const addCreative = async (req, res) => {
 
 export const likeCreative = async (req, res) => {
     try {
+        const { id } = req.params;
+        const token = req.cookies.jwt;
 
+        if (!token) {
+            return res.status(401).json({ message: "Please login to like", success: false });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const { uid } = decoded;
+
+        const creative = await Creative.findById(id)
+        if (!creative) {
+            return res.status(404).json({ message: "Creative not found", success: true });
+        }
+
+        if (creative.likedBy.includes(uid)) {
+            // remove the user from the likedBy array
+            creative.likedBy = creative.likedBy.filter(user => user.toString() !== uid);
+        } else {
+            creative.likedBy.push(uid);
+        }
+
+        await creative.save();
+        res.status(200).json({ message: "Like updated successfully", success: true });
     } catch (error) {
         console.log("Error in likeCreative controller", error.message);
         res.status(500).json({ message: "Internal Server Error" });
@@ -161,13 +184,13 @@ export const addToCollection = async (req, res) => {
         const { id } = req.params; // Creative ID
         const { collectionId } = req.body;
 
-        if(!collectionId || !id) {
+        if (!collectionId || !id) {
             return res.status(400).json({ message: "Please provide collection and creative IDs" });
         }
 
         const collection = await Collection.findById(collectionId);
 
-        if(collection.creatives.find(creative => creative.creativeId.toString() === id)) {
+        if (collection.creatives.find(creative => creative.creativeId.toString() === id)) {
             return res.status(400).json({ message: "Already exists in this collection" });
         }
 

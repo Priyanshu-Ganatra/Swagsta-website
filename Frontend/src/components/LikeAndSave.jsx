@@ -15,13 +15,22 @@ import useAddToCollection from "../../hooks/useAddCreativeToCollection";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { PiEmptyThin } from "react-icons/pi";
 import AddNewCollection from "./AddNewCollection";
+import useLikeCreative from "../../hooks/useLikeCreative";
 
-const LikeAndSave = ({ className, creativeId, creative }) => {
+const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
     const [collections, setCollections] = useState([]);
     const { isFetchingCollections, getCollections } = useGetCollections();
     const { isAdding, addToCollection } = useAddToCollection();
+    const { isLiking, likeCreative } = useLikeCreative()
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
+
+    useEffect(() => {
+        if (creative?.likedBy.includes(user._id)) {
+            setIsLiked(true)
+        }
+    }, [creative]);
 
     useEffect(() => {
         const fetchCollections = async (userId) => {
@@ -30,6 +39,29 @@ const LikeAndSave = ({ className, creativeId, creative }) => {
         };
         fetchCollections(user._id);
     }, []);
+
+    const handleLike = async () => {
+        if (isLiking) return
+        const res = await likeCreative(creativeId)
+        if (res.success) {
+            if (isLiked) {
+                setIsLiked(false)
+                setCreative((prevCreative) => {
+                    const updatedCreative = { ...prevCreative };
+                    updatedCreative.likedBy = updatedCreative.likedBy.filter((id) => id !== user._id);
+                    return updatedCreative;
+                });
+            }
+            else {
+                setIsLiked(true)
+                setCreative((prevCreative) => {
+                    const updatedCreative = { ...prevCreative };
+                    updatedCreative.likedBy.push(user._id);
+                    return updatedCreative;
+                });
+            }
+        }
+    }
 
     const handleAddToCollection = async (collectionId) => {
         if (isAdding) return
@@ -50,10 +82,20 @@ const LikeAndSave = ({ className, creativeId, creative }) => {
 
     return (
         <div className={`flex justify-around ${className} gap-4`}>
-            <button className="flex items-center justify-center rounded-lg gap-2 transition-all ease-in duration-200 bg-[#24baff] hover:bg-[#24d3ff] py-2 w-[50%]">
-                <BiSolidLike className="scale-125 text-black" />
-                <p className="text-black font-medium">Like</p>
-            </button>
+            {
+                isLiked ? (
+                    <button onClick={handleLike} className="flex items-center justify-center rounded-lg gap-2 border transition-all ease-in duration-75 hover:bg-gray-600 py-2 w-[50%]">
+                        <BiSolidLike className="scale-125" />
+                        <p className="font-medium">Liked</p>
+                    </button>
+                ) : (
+                    <button onClick={handleLike} className="flex items-center justify-center rounded-lg gap-2 transition-all ease-in duration-200 bg-[#24baff] hover:bg-[#24d3ff] py-2 w-[50%]">
+                        <BiSolidLike className="scale-125 text-black" />
+                        <p className="text-black font-medium">Like</p>
+                    </button>
+                )
+            }
+
             <button
                 className="flex items-center justify-center rounded-lg gap-2 transition-all ease-in duration-200 bg-[#404044] hover:bg-[#696970] py-2 w-[50%]"
                 onClick={() => setIsDialogOpen(true)}

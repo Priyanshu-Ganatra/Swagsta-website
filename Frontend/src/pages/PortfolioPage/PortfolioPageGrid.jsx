@@ -62,7 +62,7 @@ const PortfolioPageGrid = ({ filteredCategories, sortBy }) => {
                                         <MdStar size={16} />
                                     </div>
                                 )}
-                                <div className='group-hover:left-0 -left-96 transition-all ease-in duration-100 w-full h-full absolute top-0 flex items-end'>
+                                <div className='group-hover:left-0 -left-96 transition-all ease-out duration-200 w-full h-full absolute top-0 flex items-end'>
                                     <div className='flex gap-1 ml-2 mb-2 z-50'>
                                         <Avatar className={`'w-10 h-10'}`}>
                                             <AvatarImage src={item.creatorProfilePic} className={'object-cover'} />
@@ -74,7 +74,7 @@ const PortfolioPageGrid = ({ filteredCategories, sortBy }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="w-full h-full absolute top-0 transition-opacity opacity-0 group-hover:opacity-100 group-hover:bg-gradient-to-t from-black to-black/35 duration-100 ease-in-out"></div>
+                                <div className="w-full h-full absolute top-0 transition-opacity opacity-0 group-hover:opacity-100 group-hover:bg-gradient-to-t from-black to-black/35 duration-200 ease-out"></div>
                             </Link>
                         )
                     )

@@ -35,22 +35,19 @@ export const addComment = async ({ text, creativeId }) => {
     return response.json();
 };
 
-// export const likeProject = async (id, username) => {
-//     const response = await fetch(`${BASE_URL}/projects/like`, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ id, username }),
-//     });
+export const likeCreative = async (id) => {
+    const response = await fetch(`${BASE_URL}/creative/like/${id}`, {
+        method: 'PATCH',
+        credentials: 'include',
+    });
 
-//     if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.message);
-//     }
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+    }
 
-//     return response.json();
-// }
+    return response.json();
+}
 
 export const deleteCreative = async (id) => {
     const response = await fetch(`${BASE_URL}/creative/delete/${id}`, {
