@@ -16,6 +16,7 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import { PiEmptyThin } from "react-icons/pi";
 import AddNewCollection from "./AddNewCollection";
 import useLikeCreative from "../../hooks/useLikeCreative";
+import toast from "react-hot-toast";
 
 const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
     const [collections, setCollections] = useState([]);
@@ -27,7 +28,7 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
     const user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
-        if (creative?.likedBy.includes(user._id)) {
+        if (user && creative?.likedBy.includes(user._id)) {
             setIsLiked(true)
         }
     }, [creative]);
@@ -37,7 +38,7 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
             const data = await getCollections(userId);
             setCollections(data.collections);
         };
-        fetchCollections(user._id);
+        if(user) fetchCollections(user._id);
     }, []);
 
     const handleLike = async () => {
@@ -98,7 +99,13 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
 
             <button
                 className="flex items-center justify-center rounded-lg gap-2 transition-all ease-in duration-200 bg-[#404044] hover:bg-[#696970] py-2 w-[50%]"
-                onClick={() => setIsDialogOpen(true)}
+                onClick={() => {
+                    if(!user) {
+                        toast.error("Please login to save")
+                        return
+                    }
+                    setIsDialogOpen(true)
+                }}
             >
                 <FaBookmark className="scale-[110%]" />
                 <p className="font-medium">Save</p>
