@@ -8,7 +8,7 @@ const MainLayout = () => {
   const { loading, caseStudyProjects } = useSelector(state => state.caseStudyProjects)
 
   return (
-    <div className={`${location.pathname == '/case-studies' && !loading && caseStudyProjects.length && 'text-white bg-black/20'}`} >
+    <div className={`${location.pathname == '/case-studies' && !loading && caseStudyProjects.length ? 'text-white bg-black/20' : '' }`} >
       <Navbar />
       <Outlet />
     </div >

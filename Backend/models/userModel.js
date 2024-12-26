@@ -20,6 +20,19 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
     },
+    mobile:{
+        type: Number,
+        trim: true,
+    },
+    dob: {
+        type: Date,
+    },
+    adresses: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Address',
+        }
+    ],
     token: {
         type: String,
     },

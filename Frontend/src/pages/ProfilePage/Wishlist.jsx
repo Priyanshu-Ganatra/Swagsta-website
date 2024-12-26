@@ -13,11 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical } from "lucide-react"
 
-
-
 const Wishlist = () => {
   return (
-    <div className="px-10 pb-10 w-[80vw]">
+    <div className="px-10 pb-10">
       <h1 className="font-bold text-2xl text-center">Wishlist</h1>
 
       {/* cards */}
