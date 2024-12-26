@@ -24,6 +24,14 @@ const userSchema = new mongoose.Schema({
         type: Number,
         trim: true,
     },
+    whatsapp:{
+        type: Number,
+        trim: true,
+    },
+    isWhatsappNumberSame:{
+        type: Boolean,
+        default: false
+    },
     dob: {
         type: Date,
     },

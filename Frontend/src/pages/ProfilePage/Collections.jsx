@@ -65,7 +65,7 @@ const Collections = () => {
   }, []);
 
   return (
-    <div className="px-10 pb-10">
+    <div className="px-10 pb-10 xl:w-[80vw]">
       <h1 className="font-bold text-2xl text-center">Collections</h1>
 
       {/* added collections cards */}

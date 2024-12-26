@@ -24,7 +24,7 @@ const ProfilePage = () => {
 
                 <hr className="border-t border-black w-full xl:hidden visible" />
 
-                <div className="flex xl:flex-col xl:mt-12 xl:gap-6 md:text-sm items-center text-xs gap-2 whitespace-nowrap">
+                <div className="flex xl:flex-col xl:mt-12 gap-3 xl:gap-6 md:text-sm items-center text-xs whitespace-nowrap">
                     <NavLink
                         to={'/profile/data'}
                         className={({ isActive }) => isActive ? "font-bold uppercase route" : "route"}
@@ -69,7 +69,7 @@ const ProfilePage = () => {
             </div>
 
             {/* content */}
-            <div className="xl:ml-[20%] bg-yellow-400">
+            <div className="xl:ml-[20%]">
                 <Outlet />
             </div>
         </div>
