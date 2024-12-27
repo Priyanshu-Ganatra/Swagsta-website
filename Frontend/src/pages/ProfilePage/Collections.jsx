@@ -65,7 +65,7 @@ const Collections = () => {
   }, []);
 
   return (
-    <div className="px-10 pb-10 xl:w-[80vw]">
+    <div className="md:px-10 pb-10 xl:w-[80vw]">
       <h1 className="font-bold text-2xl text-center">Collections</h1>
 
       {/* added collections cards */}
@@ -87,13 +87,13 @@ const Collections = () => {
                         ))}
                       </div>
                     }
-                    <CardFooter className="group-hover:opacity-100 opacity-0 absolute flex flex-col items-start p-3 inset-0 bg-gradient-to-tr from-black/90 via-black/60 to-transparent transition-all ease-in duration-100">
+                    <CardFooter className="xl:group-hover:opacity-100 opacity-0 absolute flex flex-col items-start p-3 inset-0 bg-gradient-to-tr from-black/90 via-black/60 to-transparent transition-all ease-in duration-100">
                       <p className="text-white mt-auto">{collection.name}</p>
                       <p className="text-[10px] leading-none font-semibold text-white/90">{collection.creatives.length} saved</p>
                     </CardFooter>
                     <Button
                       variant="outline"
-                      className="group/delete absolute top-2 right-2 opacity-0 group-hover:opacity-100"
+                      className="group/delete absolute top-2 right-2 opacity-100 xl:opacity-0 group-hover:opacity-100"
                       size="icon"
                       disabled={isDeletingCollection}
                       onClick={(e) => {
@@ -110,6 +110,10 @@ const Collections = () => {
                     </Button>
                   </Card>
                 </DialogTrigger>
+                <div className="xl:hidden flex flex-col items-center">
+                  <p className="mt-1">{collection.name}</p>
+                  <p className="text-[10px] leading-none font-semibold">{collection.creatives.length} saved</p>
+                </div>
 
                 <DialogContent className="flex flex-col max-h-[90vh] lg:max-w-[60vw]">
                   <DialogHeader>
