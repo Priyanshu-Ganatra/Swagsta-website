@@ -79,6 +79,9 @@ export const likeCreative = async (req, res) => {
         const { id } = req.params;
         const token = req.cookies.jwt;
 
+        console.log(token);
+        
+
         if (!token) {
             return res.status(401).json({ message: "Please login to like", success: false });
         }
