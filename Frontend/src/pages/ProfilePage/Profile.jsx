@@ -87,7 +87,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="px-10 xl:w-[80vw]">
+    <div className="lg:px-32 px-10 xl:w-[80vw]">
       <h1 className="font-bold text-2xl text-center">Profile</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-3 gap-6">
@@ -151,7 +151,7 @@ const Profile = () => {
                 id="mobile"
                 type="number"
                 placeholder="Your Mobile Number"
-                className="bg-gray-100"
+                className="bg-gray-100 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
                 required
                 value={formData.mobile}
                 onChange={handleInputChange}
@@ -164,7 +164,7 @@ const Profile = () => {
                   id="whatsappNumber"
                   type="number"
                   placeholder="Your WhatsApp Number"
-                  className="bg-gray-100"
+                  className="bg-gray-100 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
                   required
                   value={formData.whatsappNumber}
                   onChange={handleInputChange}
