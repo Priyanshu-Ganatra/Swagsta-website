@@ -7,7 +7,7 @@ export const generateTokenAndSetCookie = (uid, res) => {
 
     res.cookie('jwt', token, {
         httpOnly: true,
-        sameSite: process.env.NODE_ENV === 'production' && 'none',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         maxAge: 30 * 24 * 60 * 60 * 1000,
         secure: process.env.NODE_ENV === 'production'
     })  
