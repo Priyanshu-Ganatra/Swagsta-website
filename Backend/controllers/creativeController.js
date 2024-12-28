@@ -77,14 +77,7 @@ export const addCreative = async (req, res) => {
 export const likeCreative = async (req, res) => {
     try {
         const { id } = req.params;
-        const token = req.cookies.jwt;
-
-        if (!token) {
-            return res.status(401).json({ message: "Please login to like", success: false });
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const { uid } = decoded;
+        const uid = req.user._id;
 
         const creative = await Creative.findById(id)
         if (!creative) {
@@ -144,18 +137,10 @@ export const addComment = async (req, res) => {
     try {
         const { id } = req.params;
         const { text } = req.body;
-        const token = req.cookies.jwt;
-
-        if (!token) {
-            return res.status(401).json({ message: "Please login to comment" });
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const { uid } = decoded;
 
         const comment = {
             text,
-            userId: uid,
+            userId: req.user._id,
             creativeId: id
         };
 

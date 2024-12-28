@@ -29,7 +29,10 @@ export const addComment = async ({ text, creativeId }) => {
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message);
+        if (errorData.message)
+            throw new Error(errorData.message);
+        else
+            throw new Error("Please login to comment");
     }
 
     return response.json();
@@ -43,7 +46,10 @@ export const likeCreative = async (id) => {
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message);
+        if (errorData.message)
+            throw new Error(errorData.message);
+        else
+            throw new Error("Please login to like");
     }
 
     return response.json();
@@ -112,6 +118,7 @@ export const addToCollection = async (creativeId, collectionId) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ collectionId }),
+        credentials: 'include',
     });
 
     if (!response.ok) {
