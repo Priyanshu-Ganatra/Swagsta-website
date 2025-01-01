@@ -152,10 +152,7 @@ const App = () => {
     const { loading } = useSelector((state) => state.auth);
     const { getProjects } = useGetProjects();
     const { getCreatives } = useGetCreatives();
-    const { getCaseStudyProjects } = useGetCaseStudyProjects();
-
-    console.log('app component rendered');
-    
+    const { getCaseStudyProjects } = useGetCaseStudyProjects();    
 
     useEffect(() => {
         // Initial data loading

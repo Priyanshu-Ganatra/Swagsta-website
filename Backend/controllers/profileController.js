@@ -1,6 +1,7 @@
 import Collection from "../models/collectionModel.js";
 import User from "../models/userModel.js";
 import Address from "../models/addressModel.js";
+import bcrypt from "bcryptjs";
 
 export const updateUserData = async (req, res) => {
     try {
@@ -73,7 +74,7 @@ export const updateUserData = async (req, res) => {
             { new: true }
         ).populate('addresses');
 
-        res.status(200).json({ success: true, updatedUser });
+        res.status(200).json({ success: true, message: "Updated successfully", updatedUser });
     } catch (error) {
         console.log("Error in updateUserData controller:", error.message);
         res.status(500).json({ message: "Internal Server Error", success: false });

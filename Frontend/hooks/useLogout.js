@@ -21,14 +21,12 @@ const useLogout = () => {
                 throw new Error(data.error)
             }
 
-            dispatch(setAuthUserAction({ loading: false, user: null }))
             navigate('/')
-
-            toast.success(data.message)
         } catch (error) {
             toast.error(error.message)
         }
         finally {
+            dispatch(setAuthUserAction({ loading: false, user: null }))
             setLoading(false)
         }
     }

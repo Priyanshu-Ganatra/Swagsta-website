@@ -26,10 +26,12 @@ export default function useLogin() {
 
             dispatch(setAuthUserAction({ loading: false, user: data.user }))
 
-            toast.success(data.message)
             navigate('/portfolio')
         } catch (error) {
-            toast.error(error.message)
+            dispatch(setAuthUserAction({ loading: false, user: null }))
+            setTimeout(() => {
+                toast.error(error.message)
+            }, 100);
         }
         finally {
             setLoading(false)

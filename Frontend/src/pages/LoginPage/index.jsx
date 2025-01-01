@@ -1,5 +1,4 @@
 /* eslint-disable react/no-unescaped-entities */
-import { toast } from 'react-hot-toast'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
@@ -41,11 +40,7 @@ export default function LoginPage() {
             // Set user data in Redux store
             dispatch(setAuthUserAction({ loading: false, user: userData }));
 
-            // Show toast and navigate after a short delay
-            setTimeout(() => {
-                navigate('/portfolio');
-                toast.success('Login successful');
-            }, 100); // Adjust this delay if needed
+            navigate('/portfolio');
         }
     }, [navigate, dispatch]);
 

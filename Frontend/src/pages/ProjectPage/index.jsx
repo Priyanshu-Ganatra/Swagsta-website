@@ -69,11 +69,6 @@ export default function ProjectPage() {
         getData()
     }, [id]);
 
-    // useEffect(() => {
-    //     if (user)
-    //         dispatch(setAuthUserAction(user))
-    // }, [dispatch, user]);
-
     useEffect(() => {
         setIsLiked(projectData?.likedBy?.includes(user?._id))
     }, [projectData, user?._id]);
