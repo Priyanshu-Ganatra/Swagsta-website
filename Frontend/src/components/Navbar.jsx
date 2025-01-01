@@ -33,12 +33,12 @@ export default function Navbar() {
       <div className={`flex h-20 items-center justify-between px-4 md:justify-end md:pr-10 md:gap-10`}>
         {isMobile ? (
           <>
-            <button onClick={toggleMenu} className="text-3xl z-50" aria-label="Toggle menu">
-              {isMenuOpen ? <IoClose className='scale-125' /> : <IoMenu className='scale-125' />}
-            </button>
+            <span onClick={toggleMenu} className="text-3xl z-50" aria-label="Toggle menu">
+              {isMenuOpen ? <Button className="p-0 px-4" variant="outline"><IoClose className='scale-150' /></Button> : <Button className="p-0 px-4" variant="outline"><IoMenu className='scale-150' /></Button>}
+            </span>
             {
               !location.pathname.includes('profile') && (
-                <IoSearch className='scale-[200%] mr-2' />
+                <IoSearch className='scale-150 mr-2' />
               )
             }
           </>

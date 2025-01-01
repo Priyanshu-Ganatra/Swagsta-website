@@ -74,7 +74,7 @@ export const updateUserData = async (req, res) => {
             { new: true }
         ).populate('addresses');
 
-        res.status(200).json({ success: true, message: "Updated successfully", updatedUser });
+        res.status(200).json({ success: true, message: "Saved successfully", updatedUser });
     } catch (error) {
         console.log("Error in updateUserData controller:", error.message);
         res.status(500).json({ message: "Internal Server Error", success: false });

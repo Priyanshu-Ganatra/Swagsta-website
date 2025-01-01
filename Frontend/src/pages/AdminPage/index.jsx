@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Menu, X, GalleryVerticalEnd, Info, BookOpenText, UserRoundPen, Users, LayoutDashboard, SquareArrowOutUpRight, ShoppingBag } from 'lucide-react'
