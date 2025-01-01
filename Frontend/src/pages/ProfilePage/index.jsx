@@ -4,15 +4,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FiLogOut } from "react-icons/fi";
 import { NavLink, Outlet } from "react-router-dom";
 import './index.css'
+import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
     const { loading, logout } = useLogout();
-    const user = JSON.parse(localStorage.getItem('user'));
+    let { user } = useSelector((state) => state.auth)
 
     return (
         <div className="flex flex-col xl:flex-row">
             {/* sidebar */}
-            <div className="xl:min-w-[274px] flex flex-col justify-evenly xl:gap-0 gap-4 xl:p-0 p-4 xl:justify-start bg-slate-300/80 backdrop-blur-3xl items-center xl:absolute xl:top-0 xl:left-0 xl:bottom-0 xl:h-screen rounded-2xl xl:rounded-r-2xl xl:rounded-l-none mb-4 xl:mb-0">
+            <div className="xl:min-w-[20vw] flex flex-col justify-evenly xl:gap-0 gap-4 xl:p-0 p-4 xl:justify-start bg-slate-300/80 backdrop-blur-3xl items-center xl:absolute xl:top-0 xl:left-0 xl:bottom-0 xl:h-screen rounded-2xl xl:rounded-r-2xl xl:rounded-l-none mb-4 xl:mb-0">
                 <div className="flex flex-col items-center xl:mt-20">
                     <Avatar className="xl:w-24 xl:h-24 w-14 h-14">
                         <AvatarImage src={user.pfp} />

@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Card,
   CardContent,
@@ -45,8 +44,6 @@ const Collections = () => {
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const [collectionToDelete, setCollectionToDelete] = useState(null);
 
-  const user = JSON.parse(localStorage.getItem('user'));
-
   const handleRemove = async (creativeId, collectionId) => {
     await removeFromCollection(creativeId, collectionId, setCollections);
   }
@@ -57,11 +54,11 @@ const Collections = () => {
   }
 
   useEffect(() => {
-    const fetchCollections = async (userId) => {
-      const data = await getCollections(userId);
+    const fetchCollections = async () => {
+      const data = await getCollections();
       setCollections(data.collections);
     };
-    fetchCollections(user._id);
+    fetchCollections();
   }, []);
 
   return (

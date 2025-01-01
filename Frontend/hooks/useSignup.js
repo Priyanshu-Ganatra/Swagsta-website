@@ -13,20 +13,21 @@ export default function useSignup() {
     const signup = async ({ fullName, email, password, confirmPassword, otp }) => {
         const success = handleInputErrors({ fullName, email, password, confirmPassword, otp })
         if (!success) return
-        
+
         setLoading(true);
+        dispatch(setAuthUserAction({ loading: true, user: null }))
+        
         try {
-            console.log('Before send ing req: ', { fullName, email, password, otp });
-            
+            // console.log('Before send ing req: ', { fullName, email, password, otp });
+
             const data = await signupApi({ fullName, email, password, otp });
-            
+
             if (data.savedUser === undefined) {
                 throw new Error(data.message)
             }
 
-            localStorage.setItem('user', JSON.stringify(data.savedUser))
-            dispatch(setAuthUserAction(data.savedUser))
-            
+            dispatch(setAuthUserAction({ loading: false, user: data.savedUser }))
+
             toast.success(data.message)
             navigate('/portfolio')
         } catch (error) {

@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input"
 import useAddComment from "../../hooks/useAddCommentOnCreative"
 import { useState } from "react"
 import { ArrowRight } from "lucide-react"
+import { useSelector } from "react-redux"
 
 const CommentsSection = ({ setComments, comments, id: creativeId, className }) => {
-    let user = localStorage.getItem('user')
-    user = user ? JSON.parse(user) : null
+    let { user } = useSelector((state) => state.auth)
     const { isAdding, addComment } = useAddComment()
     const [text, setText] = useState('')
     const [visibleCount, setVisibleCount] = useState(4) // State to track visible comments

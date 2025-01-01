@@ -26,30 +26,6 @@ export default function SignupPage() {
         // signup({ fullName: fullname, email, password, confirmPassword: confPassword })
     }
 
-    // useEffect(() => {
-    //     // Check if URL contains token and user data
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const token = urlParams.get('token');
-    //     const user = urlParams.get('user');
-
-    //     if (token && user) {
-    //         // Parse user data
-    //         const userData = JSON.parse(decodeURIComponent(user));
-
-    //         // Save user data and token to local storage
-    //         localStorage.setItem('user', JSON.stringify(userData));
-
-    //         // Set user data in Redux store
-    //         dispatch(setAuthUserAction(userData));
-
-    //         // Show toast and navigate after a short delay
-    //         setTimeout(() => {
-    //             navigate('/portfolio');
-    //             toast.success('Login successful');
-    //         }, 100); // Adjust this delay if needed
-    //     }
-    // }, [navigate, dispatch]);
-
     const handleGoogleLogin = () => {
         // Redirect to your backend Google login route
         window.location.href = `${BASE_URL}/auth/google`;

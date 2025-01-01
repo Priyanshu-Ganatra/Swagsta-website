@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Check, X } from "lucide-react";
@@ -10,12 +9,13 @@ import {
 } from "@/components/ui/card";
 import { useState } from "react";
 import useAddNewCollection from "../../hooks/useAddNewCollection";
+import { useSelector } from "react-redux";
 
 const AddNewCollection = ({ collections, setCollections }) => {
     const [isAddingCollection, setIsAddingCollection] = useState(false);
     const [newCollectionName, setNewCollectionName] = useState("");
     const { isAdding, addNewCollection } = useAddNewCollection();
-    const user = JSON.parse(localStorage.getItem('user'))
+    let { user } = useSelector((state) => state.auth)
 
     const onSubmit = async () => {
         if (newCollectionName === "") return

@@ -12,8 +12,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import useUpdateUserData from '../../../hooks/useUpdateUserData'
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
+import { useDispatch, useSelector } from 'react-redux'
+import { setAuthUserAction } from '../../../features/auth/authSlice'
 
 const Profile = () => {
+  const { isUpdating, updateUserData } = useUpdateUserData()
+  let { user } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+
+  const [addressesToDelete, setAddressesToDelete] = useState([])
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,13 +34,45 @@ const Profile = () => {
     password: '',
     confirmPassword: '',
     addresses: [{
-      street1: '',
-      street2: '',
+      _id: null,
+      lineOne: '',
+      lineTwo: '',
       city: '',
       state: '',
       country: ''
     }]
   })
+
+  useEffect(() => {
+    async function fetchData() {
+      setFormData({
+        name: user.fullName || '',
+        email: user.email || '',
+        birthday: user.dob ? new Date(user.dob) : null,
+        mobile: user.mobile || '',
+        whatsapp: user.isWhatsappNumberSameAsMobile || false,
+        whatsappNumber: user.whatsapp || '',
+        password: '',
+        confirmPassword: '',
+        addresses: user.addresses.length > 0 ? user.addresses.map(addr => ({
+          _id: addr._id,
+          lineOne: addr.lineOne || '',
+          lineTwo: addr.lineTwo || '',
+          city: addr.city || '',
+          state: addr.state || '',
+          country: addr.country || ''
+        })) : [{
+          _id: null,
+          lineOne: '',
+          lineTwo: '',
+          city: '',
+          state: '',
+          country: ''
+        }],
+      });
+    }
+    fetchData();
+  }, [user]);
 
   const handleInputChange = (e, index) => {
     const { id, value } = e.target
@@ -61,7 +103,6 @@ const Profile = () => {
     setFormData(prev => ({
       ...prev,
       whatsapp: checked,
-      // Clear WhatsApp number when checking
       whatsappNumber: !checked ? prev.whatsappNumber : ''
     }))
   }
@@ -69,33 +110,64 @@ const Profile = () => {
   const addAddress = () => {
     setFormData(prev => ({
       ...prev,
-      addresses: [...prev.addresses, { street1: '', street2: '', city: '', state: '', country: '' }]
+      addresses: [...prev.addresses, { _id: null, lineOne: '', lineTwo: '', city: '', state: '', country: '' }]
     }))
   }
 
   const removeAddress = (index) => {
+    if (formData.addresses[index]._id) {
+      setAddressesToDelete(prev => [...prev, formData.addresses[index]._id])
+    }
     setFormData(prev => ({
       ...prev,
       addresses: prev.addresses.filter((_, i) => i !== index)
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Form submitted with data:', formData)
-    // Add form submission logic here
+    
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match')
+      return
+    }
+
+    const res = await updateUserData({
+      fullName: formData.name,
+      email: formData.email,
+      dob: formData.birthday,
+      mobile: formData.mobile,
+      whatsapp: formData.whatsapp ? formData.mobile : formData.whatsappNumber,
+      isWhatsappNumberSameAsMobile: formData.whatsapp,
+      password: formData.password,
+      addresses: formData.addresses,
+      addressesToDelete
+    })
+    
+    const updatedUser = {
+      ...user,
+      fullName: res.updatedUser.fullName,
+      email: res.updatedUser.email,
+      dob: res.updatedUser.dob,
+      mobile: res.updatedUser.mobile,
+      whatsapp: res.updatedUser.whatsapp,
+      isWhatsappNumberSameAsMobile: res.updatedUser.isWhatsappNumberSameAsMobile,
+      addresses: res.updatedUser.addresses
+    }
+
+    dispatch(setAuthUserAction({ loading: false, user: updatedUser }))
   }
 
   return (
-    <div className="lg:px-32 px-10 xl:w-[80vw]">
+    <div className="lg:px-32 px-10 xl:w-[80vw] relative">
       <h1 className="font-bold text-2xl text-center">Profile</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid md:grid-cols-3 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Your Name</Label>
+            <Label htmlFor="name">Full Name</Label>
             <Input
               id="name"
-              placeholder="Your Name"
+              placeholder="Full Name"
               className="bg-gray-100"
               required
               value={formData.name}
@@ -152,7 +224,6 @@ const Profile = () => {
                 type="number"
                 placeholder="Your Mobile Number"
                 className="bg-gray-100 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
-                required
                 value={formData.mobile}
                 onChange={handleInputChange}
               />
@@ -165,9 +236,9 @@ const Profile = () => {
                   type="number"
                   placeholder="Your WhatsApp Number"
                   className="bg-gray-100 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
-                  required
                   value={formData.whatsappNumber}
                   onChange={handleInputChange}
+                  required
                 />
               </div>
             )}
@@ -182,32 +253,32 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter Password"
-              className="bg-gray-100"
-              required
-              value={formData.password}
-              onChange={handleInputChange}
-            />
+        {user.password && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter Password"
+                className="bg-gray-100"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                className="bg-gray-100"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              className="bg-gray-100"
-              required
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
+        )}
 
         {formData.addresses.map((address, index) => (
           <div key={index} className="space-y-4">
@@ -225,17 +296,17 @@ const Profile = () => {
               )}
             </div>
             <Input
-              id={`address.street1`}
+              id={`address.lineOne`}
               placeholder="Flat No, Floor, Building Name, Street Name"
               className="bg-gray-100"
-              value={address.street1}
+              value={address.lineOne}
               onChange={(e) => handleInputChange(e, index)}
             />
             <Input
-              id={`address.street2`}
+              id={`address.lineTwo`}
               placeholder="Main Street, Area, Landmarks"
               className="bg-gray-100"
-              value={address.street2}
+              value={address.lineTwo}
               onChange={(e) => handleInputChange(e, index)}
             />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -284,8 +355,8 @@ const Profile = () => {
         </Button>
 
         <div className="flex justify-end pb-10">
-          <Button type="submit" className="w-full md:w-auto">
-            Save
+          <Button type="submit" disabled={isUpdating} className="w-full md:w-auto">
+            {isUpdating ? 'Saving...' : 'Save Profile'}
           </Button>
         </div>
       </form>

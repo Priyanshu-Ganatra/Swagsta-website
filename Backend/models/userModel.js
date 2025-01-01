@@ -28,25 +28,19 @@ const userSchema = new mongoose.Schema({
         type: Number,
         trim: true,
     },
-    isWhatsappNumberSame:{
+    isWhatsappNumberSameAsMobile:{
         type: Boolean,
         default: false
     },
     dob: {
         type: Date,
     },
-    adresses: [
+    addresses: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Address',
         }
-    ],
-    token: {
-        type: String,
-    },
-    resetPasswordExpires: {
-        type: Date,
-    },
+    ]
 },
     { timestamps: true }
 );

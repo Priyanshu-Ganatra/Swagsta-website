@@ -17,6 +17,7 @@ import { PiEmptyThin } from "react-icons/pi";
 import AddNewCollection from "./AddNewCollection";
 import useLikeCreative from "../../hooks/useLikeCreative";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
     const [collections, setCollections] = useState([]);
@@ -25,7 +26,7 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
     const { isLiking, likeCreative } = useLikeCreative()
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
-    const user = JSON.parse(localStorage.getItem('user'));
+    let { user } = useSelector((state) => state.auth)
 
     useEffect(() => {
         if (user && creative?.likedBy.includes(user._id)) {
@@ -34,11 +35,11 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
     }, [creative]);
 
     useEffect(() => {
-        const fetchCollections = async (userId) => {
-            const data = await getCollections(userId);
+        const fetchCollections = async () => {
+            const data = await getCollections();
             setCollections(data.collections);
         };
-        if(user) fetchCollections(user._id);
+        if (user) fetchCollections();
     }, []);
 
     const handleLike = async () => {
@@ -100,7 +101,7 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
             <button
                 className="flex items-center justify-center rounded-lg gap-2 transition-all ease-in duration-200 bg-[#404044] hover:bg-[#696970] py-2 w-[50%]"
                 onClick={() => {
-                    if(!user) {
+                    if (!user) {
                         toast.error("Please login to save")
                         return
                     }

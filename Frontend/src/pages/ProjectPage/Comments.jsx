@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,10 +33,6 @@ function Comments({ id, comments, setComments, setShowLoginDialog, user, setDial
     const handleShowLess = () => {
         setShownComments(4);
     };
-
-    useEffect(() => {
-        console.log(comments);
-    }, [comments]);
 
     return (
         <div className="mt-6 space-y-6 mb-6">

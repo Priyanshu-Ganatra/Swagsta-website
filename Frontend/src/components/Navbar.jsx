@@ -1,19 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { IoSearch, IoMenu, IoClose } from "react-icons/io5"
-import useGetProjects from '../../hooks/useGetProjects'
 import NavLinks from './NavLinks'
-import useGetCreatives from '../../hooks/useGetCreatives'
-import useGetCaseStudyProjects from '../../hooks/useGetCaseStudyProjects'
 import useLogout from '../../hooks/useLogout'
 import { useLocation } from 'react-router-dom'
 import { Button } from './ui/button'
 import { FiLogOut } from 'react-icons/fi'
 
 export default function Navbar() {
-  const { getProjects } = useGetProjects()
-  const { getCreatives } = useGetCreatives()
-  const { getCaseStudyProjects } = useGetCaseStudyProjects()
+
   const { loading, logout } = useLogout();
   const [isMobile, setIsMobile] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -28,15 +22,6 @@ export default function Navbar() {
     window.addEventListener('resize', checkMobile)
 
     return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  useEffect(() => {
-    const loadData = async () => {
-      await getProjects()
-      await getCreatives()
-      await getCaseStudyProjects()
-    }
-    loadData()
   }, [])
 
   const toggleMenu = () => {

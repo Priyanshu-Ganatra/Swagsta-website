@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
 const addressSchema = new mongoose.Schema({
-    buildingOrStreetName: {
+    lineOne: {
         type: String,
         trim: true,
     },
-    areaOrLandmarks: {
+    lineTwo: {
         type: String,
         trim: true,
     },
@@ -25,6 +25,6 @@ const addressSchema = new mongoose.Schema({
     { timestamps: true }
 );
 
-const Adress = mongoose.model('Adress', addressSchema);
+const Address = mongoose.model('Address', addressSchema);
 
-export default Adress;
+export default Address;

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FaHeart, FaShareAlt } from 'react-icons/fa'
@@ -25,17 +24,19 @@ import useGetOneProject from "../../../hooks/useGetOneProject"
 import useLikeProject from "../../../hooks/useLikeProject"
 import { useParams, useNavigate } from "react-router-dom"
 import { MdStar } from "react-icons/md"
-import { useDispatch } from "react-redux"
-import { setAuthUserAction } from "../../../features/auth/authSlice"
+// import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
+// import { setAuthUserAction } from "../../../features/auth/authSlice"
 import toast from "react-hot-toast"
 import { limitWords } from "@/utils/limitWords"
 import Comments from "./Comments"
 
 export default function ProjectPage() {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
     const navigate = useNavigate()
-    let user = localStorage.getItem('user')
-    user = user ? JSON.parse(user) : null
+    let { user } = useSelector((state) => state.auth)
+    // console.log(user);
+
     const [isMobile, setIsMobile] = useState(false)
     const [projectData, setProjectData] = useState({})
     const { id } = useParams()
@@ -68,10 +69,10 @@ export default function ProjectPage() {
         getData()
     }, [id]);
 
-    useEffect(() => {
-        if (user)
-            dispatch(setAuthUserAction(user))
-    }, [dispatch, user]);
+    // useEffect(() => {
+    //     if (user)
+    //         dispatch(setAuthUserAction(user))
+    // }, [dispatch, user]);
 
     useEffect(() => {
         setIsLiked(projectData?.likedBy?.includes(user?._id))

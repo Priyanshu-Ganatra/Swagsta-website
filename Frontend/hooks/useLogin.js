@@ -15,6 +15,8 @@ export default function useLogin() {
         if (!success) return
 
         setLoading(true)
+        dispatch(setAuthUserAction({ loading: true, user: null }))
+
         try {
             const data = await loginApi({ email, password })
 
@@ -22,8 +24,7 @@ export default function useLogin() {
                 throw new Error(data.message)
             }
 
-            localStorage.setItem('user', JSON.stringify(data.user))
-            dispatch(setAuthUserAction(data.user))
+            dispatch(setAuthUserAction({ loading: false, user: data.user }))
 
             toast.success(data.message)
             navigate('/portfolio')

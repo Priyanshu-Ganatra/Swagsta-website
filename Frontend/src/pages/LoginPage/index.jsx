@@ -31,16 +31,15 @@ export default function LoginPage() {
         const user = urlParams.get('user');
 
         if (token && user) {
+            dispatch(setAuthUserAction({ loading: true, user: null })); // Set loading state
+            
             // Parse user data
             const userData = JSON.parse(decodeURIComponent(user));
             userData['_id'] = userData['id']; // Rename 'id' to '_id'
             delete userData['id']; // Delete 'id' key
 
-            // Save user data and token to local storage
-            localStorage.setItem('user', JSON.stringify(userData));
-
             // Set user data in Redux store
-            dispatch(setAuthUserAction(userData));
+            dispatch(setAuthUserAction({ loading: false, user: userData }));
 
             // Show toast and navigate after a short delay
             setTimeout(() => {

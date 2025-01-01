@@ -12,6 +12,8 @@ const useLogout = () => {
 
     const logout = async () => {
         setLoading(true)
+        dispatch(setAuthUserAction({ loading: true, user: null }))
+
         try {
             const data = await logoutApi()
 
@@ -19,8 +21,7 @@ const useLogout = () => {
                 throw new Error(data.error)
             }
 
-            localStorage.removeItem('user')
-            dispatch(setAuthUserAction({}))
+            dispatch(setAuthUserAction({ loading: false, user: null }))
             navigate('/')
 
             toast.success(data.message)

@@ -1,4 +1,5 @@
-import { signup, login, logout, sendotp } from '../controllers/authController.js';
+import { checkAuth, signup, login, logout, sendotp } from '../controllers/authController.js';
+import { protectRoute } from '../middleware/authMiddleware.js';
 import passport from 'passport';
 import express from 'express';
 import { generateTokenAndSetCookie } from '../lib/utils/generateToken.js';
@@ -27,6 +28,8 @@ router.get(
         // res.json({ token, user: userData });
     }
 );
+
+router.get("/check", protectRoute, checkAuth);
 
 router.post('/signup', signup);
 

@@ -4,8 +4,7 @@ import { useSelector } from "react-redux";
 
 // Menu is nothing but the same navbar but in the mobile view
 const NavLinks = ({ setIsMenuOpen, isMobile }) => {
-    const user = useSelector((state) => state.auth) // after successful login/signup this would be populated with user data
-    const isLoggedIn = (user.email !== undefined || localStorage.getItem('user') !== null) ? true : false
+    const { user, loading } = useSelector((state) => state.auth) // after successful login/signup this would be populated with user data
 
     return (
         <div className={`flex gap-4 items-center ${isMobile ? 'text-black flex-col' : 'flex-row'}`}>
@@ -16,7 +15,7 @@ const NavLinks = ({ setIsMenuOpen, isMobile }) => {
             <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/contact'}><p className="text-nowrap">Contact Us</p></NavLink>
             <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/store'}>Store</NavLink>
             {
-                isLoggedIn ?
+                !loading && user ?
                     <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/profile/data'}>Profile</NavLink>
                     :
                     <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? 'uppercase font-bold route' : 'route'} to={'/login'}>Login</NavLink>
