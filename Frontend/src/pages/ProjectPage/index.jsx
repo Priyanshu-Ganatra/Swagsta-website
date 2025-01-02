@@ -8,21 +8,11 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { useEffect, useState } from "react"
 import RemainingGrid from "./RemainingGrid"
 import useGetOneProject from "../../../hooks/useGetOneProject"
 import useLikeProject from "../../../hooks/useLikeProject"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { MdStar } from "react-icons/md"
 // import { useDispatch, useSelector } from "react-redux"
 import { useSelector } from "react-redux"
@@ -30,13 +20,14 @@ import { useSelector } from "react-redux"
 import toast from "react-hot-toast"
 import { limitWords } from "@/utils/limitWords"
 import Comments from "./Comments"
+import LoginModal from "@/components/LoginModal"
 
 export default function ProjectPage() {
     // const dispatch = useDispatch()
-    const navigate = useNavigate()
     let { user } = useSelector((state) => state.auth)
     // console.log(user);
 
+    const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
     const [projectData, setProjectData] = useState({})
     const { id } = useParams()
@@ -44,8 +35,6 @@ export default function ProjectPage() {
     const { isLiking, likeProject } = useLikeProject()
     const [isLiked, setIsLiked] = useState(false)
     const [comments, setComments] = useState([])
-    const [showLoginDialog, setShowLoginDialog] = useState(false)
-    const [dialogMessage, setDialogMessage] = useState('');
 
     useEffect(() => {
         const checkMobile = () => {
@@ -74,9 +63,8 @@ export default function ProjectPage() {
     }, [projectData, user?._id]);
 
     const handleLike = async () => {
-        setDialogMessage('You need to be logged in to like this project. Would you like to log in now?')
         if (!user) {
-            setShowLoginDialog(true)
+            setIsLoginDialogOpen(true)
             return
         }
         await likeProject({ projectId: id, userId: user._id })
@@ -106,23 +94,6 @@ export default function ProjectPage() {
 
     return (
         <div className="container mx-auto p-4 max-w-6xl">
-            <AlertDialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Authentication Required</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {dialogMessage}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => navigate('/login')}>
-                            Log in
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-
             {projectLoading
                 ?
                 <div className='flex h-[200px] justify-center gap-3 flex-col whitespace-nowrap items-center'>
@@ -233,9 +204,10 @@ export default function ProjectPage() {
                             </Carousel>}
                     </div>
 
-                    <Comments comments={comments} setComments={setComments} id={id} setShowLoginDialog={setShowLoginDialog} setDialogMessage={setDialogMessage} user={user} />
+                    <Comments comments={comments} setComments={setComments} id={id} isLoginDialogOpen={isLoginDialogOpen} setIsLoginDialogOpen={setIsLoginDialogOpen} user={user} />
                 </>}
 
+            <LoginModal isOpen={isLoginDialogOpen} setIsOpen={setIsLoginDialogOpen} />
             <RemainingGrid exceptId={id} />
         </div>
     )

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -6,14 +5,23 @@ import useAddComment from "../../hooks/useAddCommentOnCreative"
 import { useState } from "react"
 import { ArrowRight } from "lucide-react"
 import { useSelector } from "react-redux"
+import LoginModal from "./LoginModal"
 
 const CommentsSection = ({ setComments, comments, id: creativeId, className }) => {
     let { user } = useSelector((state) => state.auth)
     const { isAdding, addComment } = useAddComment()
     const [text, setText] = useState('')
+    const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
     const [visibleCount, setVisibleCount] = useState(4) // State to track visible comments
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        if (!text) return
+        if (!user) {
+            setIsLoginDialogOpen(true)
+            setText('')
+            return
+        }
         await addComment({
             text,
             creativeId
@@ -57,16 +65,20 @@ const CommentsSection = ({ setComments, comments, id: creativeId, className }) =
                 </Button>
             )}
             <div className="mt-4 flex space-x-2">
-                <Input
-                    className="flex-1 bg-[#2a2a2a] border-none text-gray-300 text-sm"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="Add a comment"
-                />
-                <Button className="bg-[#4a96d6] hover:bg-[#3a86c6] px-3" disabled={isAdding} onClick={handleSubmit}>
-                    {isAdding ? <span className="loading loading-spinner loading-xs"></span> : <ArrowRight className="scale-75" />}
-                </Button>
+                <form onSubmit={(e) => handleSubmit(e)} className="flex-1 flex space-x-2">
+                    <Input
+                        className="flex-1 bg-[#2a2a2a] border-none text-gray-300 text-sm"
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        placeholder="Add a comment"
+                    />
+                    <Button className="bg-[#4a96d6] hover:bg-[#3a86c6] px-3" disabled={isAdding}>
+                        {isAdding ? <span className="loading loading-spinner loading-xs"></span> : <ArrowRight className="scale-75" />}
+                    </Button>
+                </form>
             </div>
+
+            <LoginModal isOpen={isLoginDialogOpen} setIsOpen={setIsLoginDialogOpen} />
         </div>
     )
 }

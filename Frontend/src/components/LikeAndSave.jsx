@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { BiSolidLike } from "react-icons/bi";
 import { FaBookmark } from "react-icons/fa6";
 import { useEffect, useState } from "react";
@@ -16,8 +14,8 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import { PiEmptyThin } from "react-icons/pi";
 import AddNewCollection from "./AddNewCollection";
 import useLikeCreative from "../../hooks/useLikeCreative";
-import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import LoginModal from "./LoginModal";
 
 const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
     const [collections, setCollections] = useState([]);
@@ -26,6 +24,7 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
     const { isLiking, likeCreative } = useLikeCreative()
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
+    const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
     let { user } = useSelector((state) => state.auth)
 
     useEffect(() => {
@@ -44,6 +43,10 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
 
     const handleLike = async () => {
         if (isLiking) return
+        if (!user) {
+            setIsLoginDialogOpen(true)
+            return
+        }
         const res = await likeCreative(creativeId)
         if (res.success) {
             if (isLiked) {
@@ -102,7 +105,7 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
                 className="flex items-center justify-center rounded-lg gap-2 transition-all ease-in duration-200 bg-[#404044] hover:bg-[#696970] py-2 w-[50%]"
                 onClick={() => {
                     if (!user) {
-                        toast.error("Please login to save")
+                        isLoginDialogOpen ? setIsLoginDialogOpen(false) : setIsLoginDialogOpen(true)
                         return
                     }
                     setIsDialogOpen(true)
@@ -170,6 +173,8 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
 
 
             </Dialog>
+
+            <LoginModal isOpen={isLoginDialogOpen} setIsOpen={setIsLoginDialogOpen} />
         </div>
     );
 };

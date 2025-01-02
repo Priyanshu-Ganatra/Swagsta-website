@@ -1,20 +1,20 @@
-/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import useAddComment from "../../../hooks/useAddCommentOnProject";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import LoginModal from "@/components/LoginModal";
 
-function Comments({ id, comments, setComments, setShowLoginDialog, user, setDialogMessage }) {
+function Comments({ id, comments, setComments, user, isLoginDialogOpen, setIsLoginDialogOpen }) {
     const { isAdding, addComment } = useAddComment();
     const [newComment, setNewComment] = useState("");
     const [shownComments, setShownComments] = useState(4);
 
     const handleAddComment = async () => {
-        setDialogMessage('You need to be logged in to comment on this project. Would you like to log in now?');
         if (!user) {
-            setShowLoginDialog(true);
+            setNewComment("");
+            setIsLoginDialogOpen(true);
             return;
         }
         if (newComment.trim()) {
@@ -73,6 +73,8 @@ function Comments({ id, comments, setComments, setShowLoginDialog, user, setDial
                     </Button>
                 )
             )}
+
+            <LoginModal isOpen={isLoginDialogOpen} setIsOpen={setIsLoginDialogOpen} />
         </div>
     );
 }
