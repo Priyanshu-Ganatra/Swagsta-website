@@ -34,32 +34,43 @@ import { limitWords } from "@/utils/limitWords";
 import { Link } from "react-router-dom";
 import useRemoveFromCollection from "../../../hooks/useRemoveFromCollection";
 import useDeleteCollection from "../../../hooks/useDeleteCollection";
+import { useDispatch, useSelector } from "react-redux";
+import { setCollectionsAction } from "../../../features/profile/collectionsSlice";
 
 const Collections = () => {
-  const [collections, setCollections] = useState([]);
-  const { isFetchingCollections, getCollections } = useGetCollections();
+  // const [collections, setCollections] = useState([]);
+  const { loading, collections } = useSelector((state) => state.collections);
   const { isRemoving, removeFromCollection } = useRemoveFromCollection();
   const { isDeletingCollection, deleteCollection } = useDeleteCollection();
+  const dispatch = useDispatch();
 
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const [collectionToDelete, setCollectionToDelete] = useState(null);
 
   const handleRemove = async (creativeId, collectionId) => {
-    await removeFromCollection(creativeId, collectionId, setCollections);
+    dispatch(setCollectionsAction({ collections, loading: false }))
+    const res = await removeFromCollection(creativeId, collectionId);
+    if (!isRemoving && res.success) {
+      const updatedCollections = collections.map((collection) => {
+        if (collection._id === collectionId) {
+          return {
+            ...collection,
+            creatives: collection.creatives.filter(
+              (creative) => creative.creativeId._id !== creativeId
+            )
+          };
+        }
+        return collection;
+      });
+
+      dispatch(setCollectionsAction({ collections: updatedCollections, loading: false }))
+    }
   }
 
   const handleDelete = async (collectionId) => {
     setAlertDialogOpen(false);
-    await deleteCollection(collectionId, setCollections);
+    await deleteCollection(collectionId,);
   }
-
-  useEffect(() => {
-    const fetchCollections = async () => {
-      const data = await getCollections();
-      setCollections(data.collections);
-    };
-    fetchCollections();
-  }, []);
 
   return (
     <div className="md:px-10 pb-10 xl:w-[80vw]">
@@ -191,7 +202,7 @@ const Collections = () => {
         </AlertDialog>
 
         {/* add new collection card */}
-        <AddNewCollection collections={collections} setCollections={setCollections} />
+        <AddNewCollection />
       </div>
     </div>
   );

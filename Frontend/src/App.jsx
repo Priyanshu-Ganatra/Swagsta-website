@@ -1,9 +1,4 @@
-import { useEffect } from "react";
-import { checkAuth } from "@/apis/authApi";
-import { useDispatch, useSelector } from 'react-redux';
-import { setAuthUserAction } from "../features/auth/authSlice";
-import LoadingOverlay from "@/pages/ProfilePage/LoadingOverlay";
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import CaseStudyPage from './pages/CaseStudyPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -25,31 +20,9 @@ import Profile from './pages/ProfilePage/Profile.jsx';
 import Orders from './pages/ProfilePage/Orders.jsx';
 import Wishlist from './pages/ProfilePage/Wishlist.jsx';
 import PaymentsHistory from './pages/ProfilePage/PaymentsHistory.jsx';
-import useGetProjects from "../hooks/useGetProjects";
-import useGetCreatives from "../hooks/useGetCreatives";
-import useGetCaseStudyProjects from "../hooks/useGetCaseStudyProjects";
-
-// protect routes that require authentication
-const ProtectedRoute = ({ children }) => {
-    let { loading, user } = useSelector((state) => state.auth);
-
-    if (!loading && !user) {
-        return <Navigate to='/login' replace />;
-    }
-
-    return children;
-};
-
-// redirect authenticated users to profile page
-const RedirectAuthUser = ({ children }) => {
-    let { loading, user } = useSelector((state) => state.auth);
-
-    if (!loading && user) {
-        return <Navigate to='/profile/data' replace />;
-    }
-
-    return children;
-}
+import { RedirectAuthUser } from "./components/RedirectAuthUser";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import CheckAuthAndFetchContent from "./CheckAuthAndFetchContent";
 
 const router = createBrowserRouter([
     {
@@ -148,44 +121,12 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-    const dispatch = useDispatch();
-    const { loading } = useSelector((state) => state.auth);
-    const { getProjects } = useGetProjects();
-    const { getCreatives } = useGetCreatives();
-    const { getCaseStudyProjects } = useGetCaseStudyProjects();    
-
-    useEffect(() => {
-        // Initial data loading
-        const loadData = async () => {
-            await getProjects();
-            await getCreatives();
-            await getCaseStudyProjects();
-        };
-        loadData();
-    }, []);
-
-    useEffect(() => {
-        // Check authentication status
-        const fetchUser = async () => {
-            dispatch(setAuthUserAction({ loading: true, user: null }));
-            const res = await checkAuth();
-            if (res.user) {
-                dispatch(setAuthUserAction({ loading: false, user: res.user }));
-            } else {
-                dispatch(setAuthUserAction({ loading: false, user: null }));
-            }
-        };
-        fetchUser();
-    }, []);
-
-    if (loading) {
-        return <LoadingOverlay />;
-    }
 
     return (
         <div className="w-screen h-screen overflow-x-hidden font-poppins text-sm select-none">
             <RouterProvider router={router} />
             <Toaster />
+            <CheckAuthAndFetchContent />
         </div>
     );
 };

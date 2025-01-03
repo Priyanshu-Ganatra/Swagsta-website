@@ -1,6 +1,6 @@
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-export const checkAuth = async () => {
+export const checkAuth = async () => {    
     const response = await fetch(`${BASE_URL}/auth/check`, {
         method: 'GET',
         headers: {

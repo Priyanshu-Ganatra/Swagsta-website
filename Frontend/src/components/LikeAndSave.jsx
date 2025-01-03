@@ -8,38 +8,32 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog";
-import useGetCollections from "../../hooks/useGetCollections";
 import useAddToCollection from "../../hooks/useAddCreativeToCollection";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { PiEmptyThin } from "react-icons/pi";
 import AddNewCollection from "./AddNewCollection";
 import useLikeCreative from "../../hooks/useLikeCreative";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "./LoginModal";
+import { setCollectionsAction } from "../../features/profile/collectionsSlice";
 
 const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
-    const [collections, setCollections] = useState([]);
-    const { isFetchingCollections, getCollections } = useGetCollections();
+    // const [collections, setCollections] = useState([]);
+    // const { isFetchingCollections, getCollections } = useGetCollections();
+    const { loading: isFetchingCollections, collections } = useSelector((state) => state.collections);
     const { isAdding, addToCollection } = useAddToCollection();
     const { isLiking, likeCreative } = useLikeCreative()
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
     let { user } = useSelector((state) => state.auth)
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (user && creative?.likedBy.includes(user._id)) {
             setIsLiked(true)
         }
     }, [creative]);
-
-    useEffect(() => {
-        const fetchCollections = async () => {
-            const data = await getCollections();
-            setCollections(data.collections);
-        };
-        if (user) fetchCollections();
-    }, []);
 
     const handleLike = async () => {
         if (isLiking) return
@@ -73,15 +67,22 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
         const res = await addToCollection(creativeId, collectionId);
         if (!isAdding && res) {
             setIsDialogOpen(false);
-            setCollections((prevCollections) => {
-                const updatedCollections = prevCollections.map((collection) => {
-                    if (collection._id === collectionId) {
-                        collection.creatives.push({ creativeId: creative });
-                    }
-                    return collection;
-                });
-                return updatedCollections;
+            console.log(creative);
+
+            const updatedCollections = collections.map((collection) => {
+                if (collection._id === collectionId) {
+                    // Create new object with spread operator
+                    return {
+                        ...collection,
+                        creatives: [
+                            ...collection.creatives,
+                            { creativeId: creative }
+                        ]
+                    };
+                }
+                return collection;
             });
+            dispatch(setCollectionsAction({ collections: updatedCollections, loading: false }));
         }
     }
 
@@ -129,7 +130,7 @@ const LikeAndSave = ({ className, creativeId, creative, setCreative }) => {
                                 <span className="min-h-[60vh] w-full flex justify-center items-center ">Loading...</span>
                             ) :
                                 !collections.length ? (
-                                    <AddNewCollection collections={collections} setCollections={setCollections} />
+                                    <AddNewCollection />
                                 ) :
                                     (
                                         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 justify-items-center">

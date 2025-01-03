@@ -11,7 +11,7 @@ import { useState } from "react";
 import useAddNewCollection from "../../hooks/useAddNewCollection";
 import { useSelector } from "react-redux";
 
-const AddNewCollection = ({ collections, setCollections }) => {
+const AddNewCollection = () => {
     const [isAddingCollection, setIsAddingCollection] = useState(false);
     const [newCollectionName, setNewCollectionName] = useState("");
     const { isAdding, addNewCollection } = useAddNewCollection();
@@ -19,8 +19,7 @@ const AddNewCollection = ({ collections, setCollections }) => {
 
     const onSubmit = async () => {
         if (newCollectionName === "") return
-        const res = await addNewCollection({ userId: user._id, name: newCollectionName });
-        setCollections([...collections, res.newCollection]);
+        await addNewCollection({ userId: user._id, name: newCollectionName });
         if (!isAdding) {
             toggleIsAddingCollection(false);
         }
